@@ -15,7 +15,7 @@ all: build
 
 
 ## test:                              run unit tests with a 50s timeout
-test:
+ci-test:
 	$(GOTEST) --timeout 50s
 
 build:
