@@ -1,6 +1,13 @@
-package aptos
+package client
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
+
+var (
+	ErrNoResult = errors.New("no result inRPC response")
+)
 
 // HTTPError is a wrap for HTTP's not 2xx codes
 type HTTPError struct {
