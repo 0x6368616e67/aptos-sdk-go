@@ -23,7 +23,7 @@ Aptos SDK for Golang
 
 ### General: General information
 
-- ~~[ ] Show OpenAPI explorer~~
+- [ ] ~~Show OpenAPI explorer~~
 - [*] Check basic node health
 - [ ] Get ledger info
 
