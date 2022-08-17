@@ -9,7 +9,6 @@ import (
 	"reflect"
 
 	v1 "github.com/0x6368616e67/aptos-sdk-go/api/v1"
-	"github.com/0x6368616e67/aptos-sdk-go/api/v1/general"
 )
 
 // Client represent a RPC Client
@@ -75,16 +74,16 @@ func (cli *Client) request(ctx context.Context, method v1.MethodType, param inte
 }
 
 func (cli *Client) Healthy(ctx context.Context, duration uint32) error {
-	param := general.HealthyReq{
+	param := v1.HealthyReq{
 		Duration: duration,
 	}
-	rsp := general.HealthyRsp{}
+	rsp := v1.HealthyRsp{}
 	err := cli.request(ctx, v1.MTHealthy, param, &rsp)
 	return err
 }
 
-func (cli *Client) LedgerInfo(ctx context.Context) (info *general.LedgerInfo, err error) {
-	rsp := general.LedgerRsp{}
+func (cli *Client) LedgerInfo(ctx context.Context) (info *v1.LedgerInfo, err error) {
+	rsp := v1.LedgerRsp{}
 	err = cli.request(ctx, v1.MTLedger, nil, &rsp)
 	if err != nil {
 		return nil, err
