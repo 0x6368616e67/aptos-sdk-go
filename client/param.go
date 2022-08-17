@@ -7,6 +7,9 @@ import (
 
 // msg's member should only be number or string
 func paramEncode(msg interface{}) string {
+	if msg == nil {
+		return ""
+	}
 	t := reflect.TypeOf(msg)
 	v := reflect.ValueOf(msg)
 	k := v.Kind()

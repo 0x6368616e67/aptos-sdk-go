@@ -1,5 +1,7 @@
 package general
 
+import "github.com/0x6368616e67/aptos-sdk-go/types"
+
 const (
 	HealthyPath = "-/healthy"
 )
@@ -9,5 +11,5 @@ type HealthyReq struct {
 }
 
 type HealthyRsp struct {
-	Message string `json:"message"`
+	types.JSONRsp
 }

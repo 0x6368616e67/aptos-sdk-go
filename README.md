@@ -25,7 +25,7 @@ Aptos SDK for Golang
 
 - [ ] ~~Show OpenAPI explorer~~
 - [x] Check basic node health
-- [ ] Get ledger info
+- [x] Get ledger info
 
 ### Tables: Access to tables
 

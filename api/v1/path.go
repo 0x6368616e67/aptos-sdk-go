@@ -18,6 +18,8 @@ func Path(ant MethodType) string {
 	switch ant {
 	case MTHealthy:
 		p = general.HealthyPath
+	case MTLedger:
+		p = general.LedgerPath
 	}
 	return fmt.Sprintf("v1/%s", p)
 }

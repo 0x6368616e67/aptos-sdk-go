@@ -82,3 +82,13 @@ func (cli *Client) Healthy(ctx context.Context, duration uint32) error {
 	err := cli.request(ctx, v1.MTHealthy, param, &rsp)
 	return err
 }
+
+func (cli *Client) LedgerInfo(ctx context.Context) (info *general.LedgerInfo, err error) {
+	rsp := general.LedgerRsp{}
+	err = cli.request(ctx, v1.MTLedger, nil, &rsp)
+	if err != nil {
+		return nil, err
+	}
+	info = &rsp.LedgerInfo
+	return
+}
