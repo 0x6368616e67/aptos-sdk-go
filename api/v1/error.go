@@ -1,16 +1,7 @@
-package client
+package v1
 
 import (
-	"errors"
 	"fmt"
-)
-
-const (
-	ENInternal = "internal_error"
-)
-
-var (
-	ErrNoResult = errors.New("no result inRPC response")
 )
 
 type ErrorMsg struct {

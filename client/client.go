@@ -54,7 +54,7 @@ func (cli *Client) request(ctx context.Context, method v1.MethodType, param inte
 	resp, err := cli.requestGet(ctx, urlpath, param)
 	if err != nil {
 		if e, ok := err.(HTTPError); ok {
-			errmsg := ErrorMsg{}
+			errmsg := v1.ErrorMsg{}
 			json.Unmarshal(e.Body, &errmsg)
 			return errmsg
 		}
