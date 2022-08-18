@@ -75,9 +75,8 @@ func (hc *httpConn) postJSON(ctx context.Context, msg interface{}) (io.ReadClose
 }
 
 func (hc *httpConn) get(ctx context.Context, urlpath string, msg interface{}) (io.ReadCloser, error) {
-
-	eparam := paramEncode(msg)
-	endpoint := fmt.Sprintf("%s/%s?%s", hc.url, urlpath, eparam)
+	rpath := endodeURLPath(urlpath, msg)
+	endpoint := fmt.Sprintf("%s/%s", hc.url, rpath)
 	req, err := http.NewRequestWithContext(ctx, "GET", endpoint, nil)
 	if err != nil {
 		return nil, err

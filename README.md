@@ -7,7 +7,7 @@ Aptos SDK for Golang
 ## RPC Status
 ### Accounts: Access to account resources and modules
 
-- [ ] Get account
+- [x] Get account
 - [ ] Get account resources
 - [ ] Get account modules
 - [ ] Get specific account resource 

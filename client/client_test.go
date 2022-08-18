@@ -26,3 +26,12 @@ func TestLedgerInfo(t *testing.T) {
 	assert.Equal(t, err, nil, "LedgerInfo error")
 	assert.Equal(t, info.ChainID, 23)
 }
+
+func TestGetAccount(t *testing.T) {
+	cli, err := DialContext(context.Background(), devnet)
+	assert.Equal(t, err, nil, "DialContext error")
+	info, err := cli.GetAccount(context.Background(), "0x5c96ae24729caa96958df32f0c8ca715494d738e943b14961541e477b133ea9c", 0)
+	t.Logf("info:%+v \n", info)
+	assert.Equal(t, err, nil, "GetAccount error")
+	assert.Greater(t, len(info.AuthenticationKey), 0)
+}

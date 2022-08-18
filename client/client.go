@@ -91,3 +91,16 @@ func (cli *Client) LedgerInfo(ctx context.Context) (info *v1.LedgerInfo, err err
 	info = &rsp.LedgerInfo
 	return
 }
+
+func (cli *Client) GetAccount(ctx context.Context, address string, ledger uint64) (info *v1.AccountInfo, err error) {
+	param := v1.AccountReq{
+		Address:       address,
+		LedgerVersion: ledger,
+	}
+	info = &v1.AccountInfo{}
+	err = cli.request(ctx, v1.MTAccount, param, info)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
