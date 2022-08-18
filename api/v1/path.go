@@ -7,9 +7,10 @@ import (
 type MethodType uint16
 
 const (
-	MTHealthy MethodType = 0x1
-	MTLedger  MethodType = 0x2
-	MTAccount MethodType = 0x3
+	MTHealthy         MethodType = 0x1
+	MTLedger          MethodType = 0x2
+	MTAccount         MethodType = 0x3
+	MTAccountResource MethodType = 0x4
 )
 
 func Path(ant MethodType) string {
@@ -21,6 +22,8 @@ func Path(ant MethodType) string {
 		p = LedgerPath
 	case MTAccount:
 		p = AccountPath
+	case MTAccountResource:
+		p = AccountResourcePath
 	}
 	return fmt.Sprintf("v1/%s", p)
 }

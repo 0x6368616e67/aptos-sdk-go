@@ -8,7 +8,7 @@ Aptos SDK for Golang
 ### Accounts: Access to account resources and modules
 
 - [x] Get account
-- [ ] Get account resources
+- [x] Get account resources
 - [ ] Get account modules
 - [ ] Get specific account resource 
 - [ ] Get specific account module

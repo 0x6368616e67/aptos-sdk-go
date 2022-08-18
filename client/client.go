@@ -104,3 +104,16 @@ func (cli *Client) GetAccount(ctx context.Context, address string, ledger uint64
 	}
 	return
 }
+
+func (cli *Client) GetAccountResource(ctx context.Context, address string, ledger uint64) (infos []*v1.AccountResourceInfo, err error) {
+	param := v1.AccountResourceReq{
+		Address:       address,
+		LedgerVersion: ledger,
+	}
+	infos = make([]*v1.AccountResourceInfo, 1)
+	err = cli.request(ctx, v1.MTAccountResource, param, &infos)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
