@@ -17,6 +17,10 @@ const (
 	MTBlock                   MethodType = 0x8
 	MTEvent                   MethodType = 0x9
 	MTEventWithHandler        MethodType = 0xa
+	MTTransaction             MethodType = 0xb
+	MTTransactionByHash       MethodType = 0xc
+	MTTransactionByVersion    MethodType = 0xd
+	MTTransactionOfAccount    MethodType = 0xe
 )
 
 func Path(ant MethodType) string {
@@ -42,6 +46,15 @@ func Path(ant MethodType) string {
 		p = EventPath
 	case MTEventWithHandler:
 		p = EventWithHandler
+	case MTTransaction:
+		p = TransactionPath
+	case MTTransactionByHash:
+		p = TransactionByHashPath
+	case MTTransactionByVersion:
+		p = TransactionByVersionPath
+	case MTTransactionOfAccount:
+		p = TransactionOfAccountPath
+
 	}
 	return fmt.Sprintf("v1/%s", p)
 }

@@ -116,7 +116,7 @@ func (cli *Client) GetAccountResourceWithType(ctx context.Context, address strin
 		Type:          resType,
 	}
 	info = &v1.AccountResourceInfo{}
-	err = cli.request(ctx, v1.MTAccountResourceWithType, param, &info)
+	err = cli.request(ctx, v1.MTAccountResourceWithType, param, info)
 	if err != nil {
 		return nil, err
 	}
@@ -143,7 +143,7 @@ func (cli *Client) GetAccountModuleWithName(ctx context.Context, address string,
 		Name:          name,
 	}
 	info = &v1.AccountModuleInfo{}
-	err = cli.request(ctx, v1.MTAccountModuleWithName, param, &info)
+	err = cli.request(ctx, v1.MTAccountModuleWithName, param, info)
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +156,7 @@ func (cli *Client) GetBlock(ctx context.Context, height uint64, withTransactions
 		WithTransactions: withTransactions,
 	}
 	info = &v1.BlockInfo{}
-	err = cli.request(ctx, v1.MTBlock, param, &info)
+	err = cli.request(ctx, v1.MTBlock, param, info)
 	if err != nil {
 		return nil, err
 	}
@@ -186,6 +186,57 @@ func (cli *Client) GetEventWithHandler(ctx context.Context, address string, hand
 	}
 	infos = make([]*v1.EventInfo, 1)
 	err = cli.request(ctx, v1.MTEventWithHandler, param, &infos)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+func (cli *Client) GetTransactions(ctx context.Context, start uint64, limit uint16) (infos []*v1.TransactionInfo, err error) {
+	param := v1.TransactionReq{
+		Start: start,
+		Limit: limit,
+	}
+	infos = make([]*v1.TransactionInfo, 1)
+	err = cli.request(ctx, v1.MTTransaction, param, &infos)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+func (cli *Client) GetTransactionByHash(ctx context.Context, hash string) (info *v1.TransactionInfo, err error) {
+	param := v1.TransactionByHashReq{
+		Hash: hash,
+	}
+	info = &v1.TransactionInfo{}
+	err = cli.request(ctx, v1.MTTransactionByHash, param, info)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+func (cli *Client) GetTransactionByVersion(ctx context.Context, version uint64) (info *v1.TransactionInfo, err error) {
+	param := v1.TransactionByVersionReq{
+		Version: version,
+	}
+	info = &v1.TransactionInfo{}
+	err = cli.request(ctx, v1.MTTransactionByVersion, param, info)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+func (cli *Client) GetTransactionsOfAccount(ctx context.Context, address string, start uint64, limit uint16) (infos []*v1.TransactionInfo, err error) {
+	param := v1.TransactionOfAccountReq{
+		Address: address,
+		Start:   start,
+		Limit:   limit,
+	}
+	infos = make([]*v1.TransactionInfo, 1)
+	err = cli.request(ctx, v1.MTTransactionOfAccount, param, &infos)
 	if err != nil {
 		return nil, err
 	}

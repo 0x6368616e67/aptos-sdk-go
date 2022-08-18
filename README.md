@@ -33,11 +33,11 @@ Aptos SDK for Golang
 
 ### Transactions: Access to transactions
 
-- [ ] Get transactions
+- [x] Get transactions
 - [ ] Submit transaction
-- [ ] Get transaction by hash
-- [ ] Get transaction by version
-- [ ] Get account transactions
+- [x] Get transaction by hash
+- [x] Get transaction by version
+- [x] Get account transactions
 - [ ] Simulate transaction
 - [ ] Encode submission
 

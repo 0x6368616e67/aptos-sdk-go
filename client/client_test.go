@@ -102,3 +102,39 @@ func TestGetEventWithHandler(t *testing.T) {
 	assert.Equal(t, err, nil, "GetEventWithHandler error")
 	assert.Greater(t, len(infos), 0)
 }
+
+func TestGetTransactions(t *testing.T) {
+	cli, err := DialContext(context.Background(), devnet)
+	assert.Equal(t, err, nil, "DialContext error")
+	infos, err := cli.GetTransactions(context.Background(), 0, 2)
+	t.Logf("info:%+v \n", infos)
+	assert.Equal(t, err, nil, "GetTransactions error")
+	assert.Greater(t, len(infos), 0)
+}
+
+func TestGetTransactionsOfAccount(t *testing.T) {
+	cli, err := DialContext(context.Background(), devnet)
+	assert.Equal(t, err, nil, "DialContext error")
+	infos, err := cli.GetTransactionsOfAccount(context.Background(), "0x3f25e8f59cacfda5a18152e3ddd08926969416f466c38db95ed00efcd318b971", 0, 2)
+	t.Logf("info:%+v \n", infos)
+	assert.Equal(t, err, nil, "GetTransactionsOfAccount error")
+	assert.Greater(t, len(infos), 0)
+}
+
+func TestGetTransactionByHash(t *testing.T) {
+	cli, err := DialContext(context.Background(), devnet)
+	assert.Equal(t, err, nil, "DialContext error")
+	info, err := cli.GetTransactionByHash(context.Background(), "0x11a6129c84ec02e0b8e192a61e58bf234583863299397d2d9aaece72de167dfb")
+	t.Logf("info:%+v \n", info)
+	assert.Equal(t, err, nil, "GetTransactionByHash error")
+	assert.Equal(t, info.Hash, "0x11a6129c84ec02e0b8e192a61e58bf234583863299397d2d9aaece72de167dfb")
+}
+
+func TestGetTransactionByVersion(t *testing.T) {
+	cli, err := DialContext(context.Background(), devnet)
+	assert.Equal(t, err, nil, "DialContext error")
+	info, err := cli.GetTransactionByVersion(context.Background(), 25125141)
+	t.Logf("info:%+v \n", info)
+	assert.Equal(t, err, nil, "GetTransactionByVersion error")
+	assert.Equal(t, info.Hash, "0x11a6129c84ec02e0b8e192a61e58bf234583863299397d2d9aaece72de167dfb")
+}
