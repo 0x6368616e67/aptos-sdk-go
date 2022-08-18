@@ -10,7 +10,7 @@ Aptos SDK for Golang
 - [x] Get account
 - [x] Get account resources
 - [x] Get account modules
-- [ ] Get specific account resource 
+- [x] Get specific account resource 
 - [ ] Get specific account module
 ### Blocks: Access to blocks
 

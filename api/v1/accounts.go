@@ -3,9 +3,10 @@ package v1
 import "encoding/json"
 
 const (
-	AccountPath         = "accounts/{address}"
-	AccountResourcePath = "accounts/{address}/resources"
-	AccountModulePath   = "accounts/{address}/modules"
+	AccountPath                 = "accounts/{address}"
+	AccountResourcePath         = "accounts/{address}/resources"
+	AccountModulePath           = "accounts/{address}/modules"
+	AccountResourceWithTypePath = "accounts/{address}/resource/{resource_type}"
 )
 
 type AccountReq struct {
@@ -21,6 +22,12 @@ type AccountInfo struct {
 type AccountResourceReq struct {
 	LedgerVersion uint64 `param:"ledger_version,omitempty" `
 	Address       string `path:"address"`
+}
+
+type AccountResourceWithTypeReq struct {
+	LedgerVersion uint64 `param:"ledger_version,omitempty" `
+	Address       string `path:"address"`
+	Type          string `path:"resource_type"`
 }
 
 type AccountResourceInfo struct {

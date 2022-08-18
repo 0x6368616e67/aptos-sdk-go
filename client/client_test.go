@@ -45,6 +45,15 @@ func TestGetAccountResource(t *testing.T) {
 	assert.Greater(t, len(info), 0)
 }
 
+func TestGetAccountResourceWithType(t *testing.T) {
+	cli, err := DialContext(context.Background(), devnet)
+	assert.Equal(t, err, nil, "DialContext error")
+	info, err := cli.GetAccountResourceWithType(context.Background(), "0x81873855df80aae3e1468e4d47d85f4be2126df25574d29b40cb57be01a93c1c", "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>", 0)
+	t.Logf("info:%+v \n", info)
+	assert.Equal(t, err, nil, "GetAccountResourceWithType error")
+	assert.Greater(t, len(info.Data), 0)
+}
+
 func TestGetAccountModule(t *testing.T) {
 	cli, err := DialContext(context.Background(), devnet)
 	assert.Equal(t, err, nil, "DialContext error")
