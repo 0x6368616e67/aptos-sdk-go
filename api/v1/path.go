@@ -11,6 +11,7 @@ const (
 	MTLedger          MethodType = 0x2
 	MTAccount         MethodType = 0x3
 	MTAccountResource MethodType = 0x4
+	MTAccountModule   MethodType = 0x5
 )
 
 func Path(ant MethodType) string {
@@ -24,6 +25,8 @@ func Path(ant MethodType) string {
 		p = AccountPath
 	case MTAccountResource:
 		p = AccountResourcePath
+	case MTAccountModule:
+		p = AccountModulePath
 	}
 	return fmt.Sprintf("v1/%s", p)
 }

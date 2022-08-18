@@ -117,3 +117,16 @@ func (cli *Client) GetAccountResource(ctx context.Context, address string, ledge
 	}
 	return
 }
+
+func (cli *Client) GetAccountModule(ctx context.Context, address string, ledger uint64) (infos []*v1.AccountModuleInfo, err error) {
+	param := v1.AccountModuleReq{
+		Address:       address,
+		LedgerVersion: ledger,
+	}
+	infos = make([]*v1.AccountModuleInfo, 1)
+	err = cli.request(ctx, v1.MTAccountModule, param, &infos)
+	if err != nil {
+		return nil, err
+	}
+	return
+}

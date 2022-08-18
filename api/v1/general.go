@@ -6,7 +6,7 @@ const (
 )
 
 type HealthyReq struct {
-	Duration uint32 `param:"duration_secs"`
+	Duration uint32 `param:"duration_secs,omitempty"`
 }
 
 type HealthyRsp struct {
