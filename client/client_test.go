@@ -84,3 +84,21 @@ func TestGetBlock(t *testing.T) {
 	assert.NotEqual(t, err, nil)
 	t.Logf("err:%+v \n", err)
 }
+
+func TestGetEvent(t *testing.T) {
+	cli, err := DialContext(context.Background(), devnet)
+	assert.Equal(t, err, nil, "DialContext error")
+	infos, err := cli.GetEvent(context.Background(), "0x010000000000000030b26281346f628a63c8c0adb7042f991e6702141dcada1968171460c99bbe60", 0, 0)
+	t.Logf("info:%+v \n", infos)
+	assert.Equal(t, err, nil, "GetEvent error")
+	assert.Greater(t, len(infos), 0)
+}
+
+func TestGetEventWithHandler(t *testing.T) {
+	cli, err := DialContext(context.Background(), devnet)
+	assert.Equal(t, err, nil, "DialContext error")
+	infos, err := cli.GetEventWithHandler(context.Background(), "0x30b26281346f628a63c8c0adb7042f991e6702141dcada1968171460c99bbe60", "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>", "deposit_events", 0)
+	t.Logf("info:%+v \n", infos)
+	assert.Equal(t, err, nil, "GetEventWithHandler error")
+	assert.Greater(t, len(infos), 0)
+}

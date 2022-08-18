@@ -162,3 +162,32 @@ func (cli *Client) GetBlock(ctx context.Context, height uint64, withTransactions
 	}
 	return
 }
+
+func (cli *Client) GetEvent(ctx context.Context, key string, limit uint16, start uint64) (infos []*v1.EventInfo, err error) {
+	param := v1.EventReq{
+		EventKey: key,
+		Limit:    limit,
+		Start:    start,
+	}
+	infos = make([]*v1.EventInfo, 1)
+	err = cli.request(ctx, v1.MTEvent, param, &infos)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+func (cli *Client) GetEventWithHandler(ctx context.Context, address string, handler string, field string, limit uint16) (infos []*v1.EventInfo, err error) {
+	param := v1.EventWithHandlerReq{
+		Address: address,
+		Handler: handler,
+		Filed:   field,
+		Limit:   0,
+	}
+	infos = make([]*v1.EventInfo, 1)
+	err = cli.request(ctx, v1.MTEventWithHandler, param, &infos)
+	if err != nil {
+		return nil, err
+	}
+	return
+}

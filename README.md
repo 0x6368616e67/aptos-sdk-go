@@ -18,8 +18,8 @@ Aptos SDK for Golang
 
 ### Events: Access to events
 
-- [ ] Get events by event key
-- [ ] Get events by event handle
+- [x] Get events by event key
+- [x] Get events by event handle
 
 ### General: General information
 
