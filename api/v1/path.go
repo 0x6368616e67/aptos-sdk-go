@@ -13,6 +13,7 @@ const (
 	MTAccountResource         MethodType = 0x4
 	MTAccountModule           MethodType = 0x5
 	MTAccountResourceWithType MethodType = 0x6
+	MTAccountModuleWithName   MethodType = 0x7
 )
 
 func Path(ant MethodType) string {
@@ -30,6 +31,8 @@ func Path(ant MethodType) string {
 		p = AccountModulePath
 	case MTAccountResourceWithType:
 		p = AccountResourceWithTypePath
+	case MTAccountModuleWithName:
+		p = AccountModuleWithNamePath
 	}
 	return fmt.Sprintf("v1/%s", p)
 }

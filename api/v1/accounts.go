@@ -6,6 +6,7 @@ const (
 	AccountPath                 = "accounts/{address}"
 	AccountResourcePath         = "accounts/{address}/resources"
 	AccountModulePath           = "accounts/{address}/modules"
+	AccountModuleWithNamePath   = "accounts/{address}/module/{module_name}"
 	AccountResourceWithTypePath = "accounts/{address}/resource/{resource_type}"
 )
 
@@ -38,6 +39,12 @@ type AccountResourceInfo struct {
 type AccountModuleReq struct {
 	LedgerVersion uint64 `param:"ledger_version,omitempty" `
 	Address       string `path:"address"`
+}
+
+type AccountModuleWithNameReq struct {
+	LedgerVersion uint64 `param:"ledger_version,omitempty" `
+	Address       string `path:"address"`
+	Name          string `path:"module_name"`
 }
 
 type GenericTypeParam struct {

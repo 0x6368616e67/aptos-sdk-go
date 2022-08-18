@@ -62,3 +62,12 @@ func TestGetAccountModule(t *testing.T) {
 	assert.Equal(t, err, nil, "GetAccountModule error")
 	assert.Greater(t, len(info), 0)
 }
+
+func TestGetAccountModuleWithName(t *testing.T) {
+	cli, err := DialContext(context.Background(), devnet)
+	assert.Equal(t, err, nil, "DialContext error")
+	info, err := cli.GetAccountModuleWithName(context.Background(), "0x1", "acl", 0)
+	t.Logf("info:%+v \n", info)
+	assert.Equal(t, err, nil, "GetAccountModule error")
+	assert.Greater(t, len(info.Bytecode), 0)
+}

@@ -118,14 +118,14 @@ func (cli *Client) GetAccountResource(ctx context.Context, address string, ledge
 	return
 }
 
-func (cli *Client) GetAccountResourceWithType(ctx context.Context, address string, resType string, ledger uint64) (infos *v1.AccountResourceInfo, err error) {
+func (cli *Client) GetAccountResourceWithType(ctx context.Context, address string, resType string, ledger uint64) (info *v1.AccountResourceInfo, err error) {
 	param := v1.AccountResourceWithTypeReq{
 		Address:       address,
 		LedgerVersion: ledger,
 		Type:          resType,
 	}
-	infos = &v1.AccountResourceInfo{}
-	err = cli.request(ctx, v1.MTAccountResourceWithType, param, &infos)
+	info = &v1.AccountResourceInfo{}
+	err = cli.request(ctx, v1.MTAccountResourceWithType, param, &info)
 	if err != nil {
 		return nil, err
 	}
@@ -139,6 +139,20 @@ func (cli *Client) GetAccountModule(ctx context.Context, address string, ledger 
 	}
 	infos = make([]*v1.AccountModuleInfo, 1)
 	err = cli.request(ctx, v1.MTAccountModule, param, &infos)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+func (cli *Client) GetAccountModuleWithName(ctx context.Context, address string, name string, ledger uint64) (info *v1.AccountModuleInfo, err error) {
+	param := v1.AccountModuleWithNameReq{
+		Address:       address,
+		LedgerVersion: ledger,
+		Name:          name,
+	}
+	info = &v1.AccountModuleInfo{}
+	err = cli.request(ctx, v1.MTAccountModuleWithName, param, &info)
 	if err != nil {
 		return nil, err
 	}
