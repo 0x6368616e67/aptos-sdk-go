@@ -15,6 +15,20 @@ const (
 	contentType             = "application/json"
 )
 
+// HTTPError is a wrap for HTTP's not 2xx codes
+type HTTPError struct {
+	StatusCode int
+	Status     string
+	Body       []byte
+}
+
+func (err HTTPError) Error() string {
+	if len(err.Body) == 0 {
+		return err.Status
+	}
+	return fmt.Sprintf("%v: %s", err.Status, err.Body)
+}
+
 type httpConn struct {
 	client    *http.Client
 	url       string
@@ -98,7 +112,6 @@ func (hc *httpConn) get(ctx context.Context, urlpath string, msg interface{}) (i
 		if _, err := buf.ReadFrom(resp.Body); err == nil {
 			body = buf.Bytes()
 		}
-
 		return nil, HTTPError{
 			Status:     resp.Status,
 			StatusCode: resp.StatusCode,

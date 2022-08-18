@@ -14,6 +14,7 @@ const (
 	MTAccountModule           MethodType = 0x5
 	MTAccountResourceWithType MethodType = 0x6
 	MTAccountModuleWithName   MethodType = 0x7
+	MTBlock                   MethodType = 0x8
 )
 
 func Path(ant MethodType) string {
@@ -33,6 +34,8 @@ func Path(ant MethodType) string {
 		p = AccountResourceWithTypePath
 	case MTAccountModuleWithName:
 		p = AccountModuleWithNamePath
+	case MTBlock:
+		p = BlockPath
 	}
 	return fmt.Sprintf("v1/%s", p)
 }

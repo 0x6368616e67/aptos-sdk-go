@@ -14,7 +14,7 @@ Aptos SDK for Golang
 - [x] Get specific account module
 ### Blocks: Access to blocks
 
-- [ ] Get blocks by height
+- [x] Get blocks by height
 
 ### Events: Access to events
 

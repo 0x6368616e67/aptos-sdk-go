@@ -10,7 +10,6 @@ type HealthyReq struct {
 }
 
 type HealthyRsp struct {
-	JSONRsp
 }
 
 type LedgerInfo struct {
@@ -25,6 +24,5 @@ type LedgerInfo struct {
 }
 
 type LedgerRsp struct {
-	JSONRsp
 	LedgerInfo
 }

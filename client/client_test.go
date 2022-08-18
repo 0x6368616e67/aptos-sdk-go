@@ -71,3 +71,16 @@ func TestGetAccountModuleWithName(t *testing.T) {
 	assert.Equal(t, err, nil, "GetAccountModule error")
 	assert.Greater(t, len(info.Bytecode), 0)
 }
+
+func TestGetBlock(t *testing.T) {
+	cli, err := DialContext(context.Background(), devnet)
+	assert.Equal(t, err, nil, "DialContext error")
+	info, err := cli.GetBlock(context.Background(), 2042680, true)
+	t.Logf("info:%+v \n", info)
+	assert.Equal(t, err, nil, "GetBlock error")
+	assert.Equal(t, info.BlockHeight, "2042680")
+
+	_, err = cli.GetBlock(context.Background(), 20426801232323, true)
+	assert.NotEqual(t, err, nil)
+	t.Logf("err:%+v \n", err)
+}

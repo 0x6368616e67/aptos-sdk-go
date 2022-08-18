@@ -35,20 +35,6 @@ func DialContext(ctx context.Context, rpcurl string) (client *Client, err error)
 	return
 }
 
-func (cli *Client) requestJSON(ctx context.Context, msg interface{}) (rsp *rpcMessage, err error) {
-	respBody, err := cli.conn.postJSON(ctx, msg)
-	if err != nil {
-		return
-	}
-	defer respBody.Close()
-
-	rsp = &rpcMessage{}
-	if err = json.NewDecoder(respBody).Decode(rsp); err != nil {
-		return
-	}
-	return
-}
-
 func (cli *Client) requestGet(ctx context.Context, urlpath string, msg interface{}) (rsp []byte, err error) {
 	respBody, err := cli.conn.get(ctx, urlpath, msg)
 	if err != nil {
@@ -67,6 +53,11 @@ func (cli *Client) request(ctx context.Context, method v1.MethodType, param inte
 	urlpath := v1.Path(method)
 	resp, err := cli.requestGet(ctx, urlpath, param)
 	if err != nil {
+		if e, ok := err.(HTTPError); ok {
+			errmsg := ErrorMsg{}
+			json.Unmarshal(e.Body, &errmsg)
+			return errmsg
+		}
 		return err
 	}
 	json.Unmarshal(resp, result)
@@ -153,6 +144,19 @@ func (cli *Client) GetAccountModuleWithName(ctx context.Context, address string,
 	}
 	info = &v1.AccountModuleInfo{}
 	err = cli.request(ctx, v1.MTAccountModuleWithName, param, &info)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+func (cli *Client) GetBlock(ctx context.Context, height uint64, withTransactions bool) (info *v1.BlockInfo, err error) {
+	param := v1.BlockReq{
+		BlockHeight:      height,
+		WithTransactions: withTransactions,
+	}
+	info = &v1.BlockInfo{}
+	err = cli.request(ctx, v1.MTBlock, param, &info)
 	if err != nil {
 		return nil, err
 	}
