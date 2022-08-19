@@ -50,12 +50,13 @@ func newHTTPConn(endpoint string) *httpConn {
 	return conn
 }
 
-func (hc *httpConn) postJSON(ctx context.Context, msg interface{}) (io.ReadCloser, error) {
+func (hc *httpConn) postJSON(ctx context.Context, urlpath string, msg interface{}) (io.ReadCloser, error) {
+	endpoint := fmt.Sprintf("%s/%s", hc.url, urlpath)
 	body, err := json.Marshal(msg)
 	if err != nil {
 		return nil, err
 	}
-	req, err := http.NewRequestWithContext(ctx, "POST", hc.url, io.NopCloser(bytes.NewReader(body)))
+	req, err := http.NewRequestWithContext(ctx, "POST", endpoint, io.NopCloser(bytes.NewReader(body)))
 	if err != nil {
 		return nil, err
 	}

@@ -3,11 +3,11 @@ package v1
 import "encoding/json"
 
 const (
-	AccountPath                 = "accounts/{address}"
-	AccountResourcePath         = "accounts/{address}/resources"
-	AccountModulePath           = "accounts/{address}/modules"
-	AccountModuleWithNamePath   = "accounts/{address}/module/{module_name}"
-	AccountResourceWithTypePath = "accounts/{address}/resource/{resource_type}"
+	AccountPath                 = "GET@accounts/{address}"
+	AccountResourcePath         = "GET@accounts/{address}/resources"
+	AccountModulePath           = "GET@accounts/{address}/modules"
+	AccountModuleWithNamePath   = "GET@accounts/{address}/module/{module_name}"
+	AccountResourceWithTypePath = "GET@accounts/{address}/resource/{resource_type}"
 )
 
 type AccountReq struct {

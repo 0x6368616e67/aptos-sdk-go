@@ -1,7 +1,7 @@
 package v1
 
 const (
-	BlockPath = "blocks/by_height/{block_height}"
+	BlockPath = "GET@blocks/by_height/{block_height}"
 )
 
 type BlockReq struct {

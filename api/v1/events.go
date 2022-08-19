@@ -3,8 +3,8 @@ package v1
 import "encoding/json"
 
 const (
-	EventPath        = "events/{event_key}"
-	EventWithHandler = "accounts/{address}/events/{event_handle}/{field_name}"
+	EventPath        = "GET@events/{event_key}"
+	EventWithHandler = "GET@accounts/{address}/events/{event_handle}/{field_name}"
 )
 
 type EventReq struct {

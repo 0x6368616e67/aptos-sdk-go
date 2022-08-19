@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/0x6368616e67/aptos-sdk-go/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -137,4 +138,27 @@ func TestGetTransactionByVersion(t *testing.T) {
 	t.Logf("info:%+v \n", info)
 	assert.Equal(t, err, nil, "GetTransactionByVersion error")
 	assert.Equal(t, info.Hash, "0x11a6129c84ec02e0b8e192a61e58bf234583863299397d2d9aaece72de167dfb")
+}
+
+func TestGetTransactionEncoding(t *testing.T) {
+	cli, err := DialContext(context.Background(), devnet)
+	assert.Equal(t, err, nil, "DialContext error")
+	var args []interface{}
+	args = append(args, "0x3aa1e96803500900ed3bdd8cc779fefe7e88aafd015a65b2aa5eb39bda2e1f47")
+	args = append(args, "20000")
+	tx := types.Transaction{
+		Sender:                  "0x3dc12eb3816bdf291b28e544cf88c1fb647d613ff63cb464bfb59fb2bf941ec6",
+		SequenceNumber:          "7635",
+		MaxGasAmount:            "2000",
+		GasUnitPrice:            "1",
+		ExpirationTimestampSecs: "1660903177",
+		Payload: types.TransactionPayload{
+			Type:      "entry_function_payload",
+			Function:  "0x1::aptos_coin::mint",
+			Arguments: args,
+		},
+	}
+	code, err := cli.GetTransactionEncoding(context.Background(), tx)
+	t.Logf("code:%+v \n", code)
+	assert.Equal(t, err, nil, "GetTransactionEncoding error")
 }

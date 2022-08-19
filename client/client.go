@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	v1 "github.com/0x6368616e67/aptos-sdk-go/api/v1"
+	"github.com/0x6368616e67/aptos-sdk-go/types"
 )
 
 // Client represent a RPC Client
@@ -46,12 +47,28 @@ func (cli *Client) requestGet(ctx context.Context, urlpath string, msg interface
 	return
 }
 
-func (cli *Client) request(ctx context.Context, method v1.MethodType, param interface{}, result interface{}) error {
+func (cli *Client) requestPost(ctx context.Context, urlpath string, msg interface{}) (rsp []byte, err error) {
+	respBody, err := cli.conn.postJSON(ctx, urlpath, msg)
+	if err != nil {
+		return
+	}
+	defer respBody.Close()
+
+	rsp, err = ioutil.ReadAll(respBody)
+	return
+}
+
+func (cli *Client) request(ctx context.Context, method v1.MethodType, param interface{}, result interface{}) (err error) {
 	if result != nil && reflect.TypeOf(result).Kind() != reflect.Ptr {
 		return fmt.Errorf("result parameter must be pointer or nil interface: %v", result)
 	}
-	urlpath := v1.Path(method)
-	resp, err := cli.requestGet(ctx, urlpath, param)
+	var resp []byte
+	urlpath, httpMethod := v1.Path(method)
+	if httpMethod == "GET" {
+		resp, err = cli.requestGet(ctx, urlpath, param)
+	} else if httpMethod == "POST" {
+		resp, err = cli.requestPost(ctx, urlpath, param)
+	}
 	if err != nil {
 		if e, ok := err.(HTTPError); ok {
 			errmsg := v1.ErrorMsg{}
@@ -240,5 +257,10 @@ func (cli *Client) GetTransactionsOfAccount(ctx context.Context, address string,
 	if err != nil {
 		return nil, err
 	}
+	return
+}
+
+func (cli *Client) GetTransactionEncoding(ctx context.Context, tx types.Transaction) (code string, err error) {
+	err = cli.request(ctx, v1.MTTransactionEncoding, tx, &code)
 	return
 }

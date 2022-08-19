@@ -1,10 +1,13 @@
 package v1
 
 const (
-	TransactionPath          = "transactions"
-	TransactionByHashPath    = "transactions/by_hash/{txn_hash}"
-	TransactionByVersionPath = "transactions/by_version/{txn_version}"
-	TransactionOfAccountPath = "accounts/{address}/transactions"
+	TransactionPath          = "GET@transactions"
+	TransactionByHashPath    = "GET@transactions/by_hash/{txn_hash}"
+	TransactionByVersionPath = "GET@transactions/by_version/{txn_version}"
+	TransactionOfAccountPath = "GET@accounts/{address}/transactions"
+	TransactionEncodingPath  = "POST@transactions/encode_submission"
+	TransactionSimulatePath  = "POST@transactions/simulate"
+	TransactionSubmitPath    = "POST@transactions"
 )
 
 type TransactionOfAccountReq struct {

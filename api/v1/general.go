@@ -1,8 +1,8 @@
 package v1
 
 const (
-	HealthyPath = "-/healthy"
-	LedgerPath  = ""
+	HealthyPath = "GET@-/healthy"
+	LedgerPath  = "GET@"
 )
 
 type HealthyReq struct {

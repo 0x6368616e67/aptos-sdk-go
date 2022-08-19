@@ -1,7 +1,5 @@
 package types
 
-import "github.com/0x6368616e67/aptos-sdk-go/client"
-
 type TransactionPayload struct {
 	Type          string        `json:"type"`
 	Function      string        `json:"function"`
@@ -23,9 +21,5 @@ type Transaction struct {
 	ExpirationTimestampSecs string               `json:"expiration_timestamp_secs"`
 	Payload                 TransactionPayload   `json:"payload"`
 	Signature               TransactionSignature `json:"signature"`
-	SecondarySigners        []string             `json:"secondary_signers"`
-}
-
-func (tx *Transaction) Encode(cli *client.Client) (data []byte, err error) {
-	return
+	SecondarySigners        []string             `json:"secondary_signers,omniempty"`
 }

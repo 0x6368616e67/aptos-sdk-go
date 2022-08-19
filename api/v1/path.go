@@ -2,6 +2,7 @@ package v1
 
 import (
 	"fmt"
+	"strings"
 )
 
 type MethodType uint16
@@ -21,9 +22,13 @@ const (
 	MTTransactionByHash       MethodType = 0xc
 	MTTransactionByVersion    MethodType = 0xd
 	MTTransactionOfAccount    MethodType = 0xe
+
+	MTTransactionEncoding MethodType = 0x11
+	MTTransactionSimulate MethodType = 0x12
+	MTTransactionSubmit   MethodType = 0x13
 )
 
-func Path(ant MethodType) string {
+func Path(ant MethodType) (rawpath string, method string) {
 	p := ""
 	switch ant {
 	case MTHealthy:
@@ -54,7 +59,21 @@ func Path(ant MethodType) string {
 		p = TransactionByVersionPath
 	case MTTransactionOfAccount:
 		p = TransactionOfAccountPath
-
+	case MTTransactionEncoding:
+		p = TransactionEncodingPath
+	case MTTransactionSimulate:
+		p = TransactionSimulatePath
+	case MTTransactionSubmit:
+		p = TransactionSubmitPath
 	}
-	return fmt.Sprintf("v1/%s", p)
+	items := strings.Split(p, "@")
+	if len(items) == 1 {
+		rawpath = p
+		method = "GET"
+		return
+	}
+	method = items[0]
+	rawpath = strings.Join(items[1:], "@")
+	rawpath = fmt.Sprintf("v1/%s", rawpath)
+	return
 }
