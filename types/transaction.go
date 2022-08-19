@@ -27,5 +27,5 @@ type Transaction struct {
 }
 
 func (tx *Transaction) Encode(cli *client.Client) (data []byte, err error) {
-
+	return
 }
