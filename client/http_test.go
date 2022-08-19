@@ -20,7 +20,7 @@ func TestDoRequest(t *testing.T) {
 	for _, ep := range endpoints {
 		req := &Request{"World"}
 		c := newHTTPConn(ep)
-		_, err := c.postJSON(context.Background(), req)
+		_, err := c.postJSON(context.Background(), "", req)
 		assert.NotEqual(t, err, nil, "should be a 404")
 
 	}

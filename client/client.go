@@ -260,7 +260,14 @@ func (cli *Client) GetTransactionsOfAccount(ctx context.Context, address string,
 	return
 }
 
-func (cli *Client) GetTransactionEncoding(ctx context.Context, tx types.Transaction) (code string, err error) {
+func (cli *Client) GetTransactionEncoding(ctx context.Context, tx *types.Transaction) (code string, err error) {
 	err = cli.request(ctx, v1.MTTransactionEncoding, tx, &code)
+	return
+}
+
+func (cli *Client) SubmitTransaction(ctx context.Context, tx *types.Transaction) (result *v1.TransactionInfo, err error) {
+	result = &v1.TransactionInfo{}
+	err = cli.request(ctx, v1.MTTransactionSubmit, tx, result)
+	fmt.Printf("err:%+v\n", err)
 	return
 }

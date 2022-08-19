@@ -153,12 +153,14 @@ func TestGetTransactionEncoding(t *testing.T) {
 		GasUnitPrice:            "1",
 		ExpirationTimestampSecs: "1660903177",
 		Payload: types.TransactionPayload{
-			Type:      "entry_function_payload",
-			Function:  "0x1::aptos_coin::mint",
-			Arguments: args,
+			Type:          "entry_function_payload",
+			Function:      "0x1::aptos_coin::mint",
+			Arguments:     args,
+			TypeArguments: make([]string, 0),
 		},
+		SecondarySigners: make([]string, 0),
 	}
-	code, err := cli.GetTransactionEncoding(context.Background(), tx)
+	code, err := cli.GetTransactionEncoding(context.Background(), &tx)
 	t.Logf("code:%+v \n", code)
 	assert.Equal(t, err, nil, "GetTransactionEncoding error")
 }
