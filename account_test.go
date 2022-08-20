@@ -14,59 +14,59 @@ func TestAccount(t *testing.T) {
 	t.Logf("%s:%+v", account.Address().String(), account)
 }
 
-func TestAccountSubmitTransaction(t *testing.T) {
-	account := NewAccountWithHexSeed("5457B9493319D90188BF69187E9F8E8476258061341D86D6DB969A1E6C5FD7AD")
-	//account := NewAccount()
-	var args []interface{}
-	args = append(args, "0xb5b3f30964642ff9406c092e89f320ace3ec8508e039b41f66adf7d466d52df9")
-	args = append(args, "100")
-	tx := types.Transaction{
-		InnerTransaction: types.InnerTransaction{
-			Sender:                  account.Address().String(),
-			SequenceNumber:          "6",
-			MaxGasAmount:            "2000",
-			GasUnitPrice:            "1",
-			ExpirationTimestampSecs: "1662001242",
-			Payload: types.TransactionPayload{
-				Type:          "entry_function_payload",
-				Function:      "0x1::coin::transfer",
-				Arguments:     args,
-				TypeArguments: []string{"0x1::aptos_coin::AptosCoin"},
-			},
-		},
-		SecondarySigners: nil,
-	}
-	hash, err := account.SendTransaction(&tx)
-	assert.Equal(t, err, nil)
-	t.Logf("%s", hash)
-}
+// func TestAccountSubmitTransaction(t *testing.T) {
+// 	account := NewAccountWithHexSeed("5457B9493319D90188BF69187E9F8E8476258061341D86D6DB969A1E6C5FD7AD")
+// 	//account := NewAccount()
+// 	var args []interface{}
+// 	args = append(args, "0xb5b3f30964642ff9406c092e89f320ace3ec8508e039b41f66adf7d466d52df9")
+// 	args = append(args, "100")
+// 	tx := types.Transaction{
+// 		InnerTransaction: types.InnerTransaction{
+// 			Sender:                  account.Address().String(),
+// 			SequenceNumber:          "6",
+// 			MaxGasAmount:            "2000",
+// 			GasUnitPrice:            "1",
+// 			ExpirationTimestampSecs: "1662001242",
+// 			Payload: types.TransactionPayload{
+// 				Type:          "entry_function_payload",
+// 				Function:      "0x1::coin::transfer",
+// 				Arguments:     args,
+// 				TypeArguments: []string{"0x1::aptos_coin::AptosCoin"},
+// 			},
+// 		},
+// 		SecondarySigners: nil,
+// 	}
+// 	hash, err := account.SendTransaction(&tx)
+// 	assert.Equal(t, err, nil)
+// 	t.Logf("%s", hash)
+// }
 
-func TestAccountSubmitTransaction2(t *testing.T) {
-	account := NewAccountWithHexSeed("5457B9493319D90188BF69187E9F8E8476258061341D86D6DB969A1E6C5FD7AD")
-	//account := NewAccount()
-	var args []interface{}
-	args = append(args, account.Address().String())
-	args = append(args, "1999291")
-	tx := types.Transaction{
-		InnerTransaction: types.InnerTransaction{
-			Sender:                  account.Address().String(),
-			SequenceNumber:          "10",
-			MaxGasAmount:            "2000",
-			GasUnitPrice:            "1",
-			ExpirationTimestampSecs: "1662001242",
-			Payload: types.TransactionPayload{
-				Type:          "entry_function_payload",
-				Function:      "0x1::aptos_coin::mint",
-				Arguments:     args,
-				TypeArguments: make([]string, 0),
-			},
-		},
-		SecondarySigners: nil,
-	}
-	hash, err := account.SendTransaction(&tx)
-	assert.Equal(t, err, nil)
-	t.Logf("%s", hash)
-}
+// func TestAccountSubmitTransaction2(t *testing.T) {
+// 	account := NewAccountWithHexSeed("5457B9493319D90188BF69187E9F8E8476258061341D86D6DB969A1E6C5FD7AD")
+// 	//account := NewAccount()
+// 	var args []interface{}
+// 	args = append(args, account.Address().String())
+// 	args = append(args, "1999291")
+// 	tx := types.Transaction{
+// 		InnerTransaction: types.InnerTransaction{
+// 			Sender:                  account.Address().String(),
+// 			SequenceNumber:          "10",
+// 			MaxGasAmount:            "2000",
+// 			GasUnitPrice:            "1",
+// 			ExpirationTimestampSecs: "1662001242",
+// 			Payload: types.TransactionPayload{
+// 				Type:          "entry_function_payload",
+// 				Function:      "0x1::aptos_coin::mint",
+// 				Arguments:     args,
+// 				TypeArguments: make([]string, 0),
+// 			},
+// 		},
+// 		SecondarySigners: nil,
+// 	}
+// 	hash, err := account.SendTransaction(&tx)
+// 	assert.Equal(t, err, nil)
+// 	t.Logf("%s", hash)
+// }
 
 func TestAccountTransfer(t *testing.T) {
 	account := NewAccountWithHexSeed("5457B9493319D90188BF69187E9F8E8476258061341D86D6DB969A1E6C5FD7AD")
