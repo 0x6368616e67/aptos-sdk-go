@@ -151,6 +151,7 @@ Then in the explorer , we can see what happend [0x6566c80b00cb66a79cbe153ed96827
 
 - [ ] Add wait status for sending a transaction
 - [ ] Add non native token operation for 0x3::token
+- [ ] Add support for x25519
 - [ ] Add more examples
 - [ ] Add more document
 - [ ] Add support for tables

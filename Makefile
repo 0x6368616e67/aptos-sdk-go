@@ -16,7 +16,7 @@ all: build
 
 ## test:                              run unit tests with a 50s timeout
 ci-test:
-	$(GOTEST) --timeout 50s
+	$(GOTEST)  
 
 build:
 	@echo "Building $*"
