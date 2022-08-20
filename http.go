@@ -56,7 +56,6 @@ func (hc *httpConn) postJSON(ctx context.Context, urlpath string, msg interface{
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("body:%v\n", string(body))
 	req, err := http.NewRequestWithContext(ctx, "POST", endpoint, io.NopCloser(bytes.NewReader(body)))
 	if err != nil {
 		return nil, err
