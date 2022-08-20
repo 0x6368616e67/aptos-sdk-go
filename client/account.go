@@ -68,7 +68,6 @@ func (acc *Account) SignTx(tx *types.Transaction) (err error) {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("code:%+v", code)
 	codeBuf, err := hex.DecodeString(code[2:])
 	if err != nil {
 		return err

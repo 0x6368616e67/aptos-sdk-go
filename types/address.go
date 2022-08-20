@@ -2,6 +2,8 @@ package types
 
 import (
 	"encoding/hex"
+
+	"golang.org/x/crypto/sha3"
 )
 
 const (
@@ -56,7 +58,12 @@ type Address [AddressLength]byte
 // If b is larger than len(h), b will be cropped from the left.
 func BytesToAddress(b []byte) Address {
 	var a Address
-	a.SetBytes(b)
+	hash := sha3.New256()
+	hash.Write(b)
+	bytes := make([]byte, 1)
+	hash.Write(bytes)
+	addrBytes := hash.Sum(nil)
+	a.SetBytes(addrBytes)
 	return a
 }
 

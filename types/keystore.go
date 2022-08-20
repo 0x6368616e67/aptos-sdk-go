@@ -142,7 +142,7 @@ func GenPrivKeyFromSecret(secret []byte) PrivKey {
 // PubKeyEd25519 implements crypto.PubKey for the Ed25519 signature scheme.
 type PubKey []byte
 
-// Address is the SHA256-20 of the raw pubkey bytes.
+// Address is the SHA256 of the raw pubkey bytes.
 func (pubKey PubKey) Address() Address {
 	if len(pubKey) != PubKeySize {
 		panic("pubkey is incorrect size")

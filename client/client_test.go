@@ -147,18 +147,20 @@ func TestGetTransactionEncoding(t *testing.T) {
 	args = append(args, "0x3aa1e96803500900ed3bdd8cc779fefe7e88aafd015a65b2aa5eb39bda2e1f47")
 	args = append(args, "20000")
 	tx := types.Transaction{
-		Sender:                  "0x3dc12eb3816bdf291b28e544cf88c1fb647d613ff63cb464bfb59fb2bf941ec6",
-		SequenceNumber:          "7635",
-		MaxGasAmount:            "2000",
-		GasUnitPrice:            "1",
-		ExpirationTimestampSecs: "1660903177",
-		Payload: types.TransactionPayload{
-			Type:          "entry_function_payload",
-			Function:      "0x1::aptos_coin::mint",
-			Arguments:     args,
-			TypeArguments: make([]string, 0),
+		InnerTransaction: types.InnerTransaction{
+			Sender:                  "0x3dc12eb3816bdf291b28e544cf88c1fb647d613ff63cb464bfb59fb2bf941ec6",
+			SequenceNumber:          "7635",
+			MaxGasAmount:            "2000",
+			GasUnitPrice:            "1",
+			ExpirationTimestampSecs: "1660903177",
+			Payload: types.TransactionPayload{
+				Type:          "entry_function_payload",
+				Function:      "0x1::aptos_coin::mint",
+				Arguments:     args,
+				TypeArguments: make([]string, 0),
+			},
 		},
-		SecondarySigners: make([]string, 0),
+		SecondarySigners: nil,
 	}
 	code, err := cli.GetTransactionEncoding(context.Background(), &tx)
 	t.Logf("code:%+v \n", code)
