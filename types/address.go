@@ -78,7 +78,12 @@ func (a *Address) SetBytes(b []byte) {
 
 // HexToAddress returns Address with byte values of s.
 // If s is larger than len(h), s will be cropped from the left.
-func HexToAddress(s string) Address { return BytesToAddress(FromHex(s)) }
+func HexToAddress(s string) Address {
+	var a Address
+	b := FromHex(s)
+	a.SetBytes(b)
+	return a
+}
 
 // IsHexAddress verifies whether a string can represent a valid hex-encoded
 // Ethereum address or not.

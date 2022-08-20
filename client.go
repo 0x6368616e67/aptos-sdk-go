@@ -1,4 +1,4 @@
-package client
+package aptos
 
 import (
 	"context"
@@ -268,6 +268,11 @@ func (cli *Client) GetTransactionEncoding(ctx context.Context, tx *types.Transac
 func (cli *Client) SubmitTransaction(ctx context.Context, tx *types.Transaction) (result *v1.TransactionInfo, err error) {
 	result = &v1.TransactionInfo{}
 	err = cli.request(ctx, v1.MTTransactionSubmit, tx, result)
-	fmt.Printf("err:%+v\n", err)
+	return
+}
+
+func (cli *Client) SimulateTransaction(ctx context.Context, tx *types.Transaction) (result *v1.TransactionInfo, err error) {
+	result = &v1.TransactionInfo{}
+	err = cli.request(ctx, v1.MTTransactionSimulate, tx, result)
 	return
 }

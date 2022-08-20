@@ -1,4 +1,4 @@
-package client
+package aptos
 
 import (
 	"testing"
@@ -66,4 +66,20 @@ func TestAccountSubmitTransaction2(t *testing.T) {
 	hash, err := account.SendTransaction(&tx)
 	assert.Equal(t, err, nil)
 	t.Logf("%s", hash)
+}
+
+func TestAccountTransfer(t *testing.T) {
+	account := NewAccountWithHexSeed("5457B9493319D90188BF69187E9F8E8476258061341D86D6DB969A1E6C5FD7AD")
+
+	hash, err := account.Transfer(types.HexToAddress("0xb5b3f30964642ff9406c092e89f320ace3ec8508e039b41f66adf7d466d52df9"), 1000)
+	assert.Equal(t, err, nil)
+	t.Logf("%s", hash)
+}
+
+func TestAccountBalance(t *testing.T) {
+	account := NewAccountWithHexSeed("5457B9493319D90188BF69187E9F8E8476258061341D86D6DB969A1E6C5FD7AD")
+
+	balance, err := account.Balance()
+	assert.Equal(t, err, nil)
+	t.Logf("balance:%d", balance)
 }

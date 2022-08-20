@@ -34,10 +34,18 @@ Aptos SDK for Golang
 ### Transactions: Access to transactions
 
 - [x] Get transactions
-- [ ] Submit transaction
+- [x] Submit transaction
 - [x] Get transaction by hash
 - [x] Get transaction by version
 - [x] Get account transactions
-- [ ] Simulate transaction
-- [ ] Encode submission
+- [x] Simulate transaction
+- [x] Encode submission
+
+
+## TODO
+
+- [ ] Add wait status for sending a transaction
+- [ ] Add non native token operation for 0x3::token
+- [ ] Add support for tables
+- [ ] Add support multi signer
 

@@ -5,7 +5,9 @@ const (
 )
 
 var (
-	Endpoint string
+	Endpoint     string
+	MaxGasAmount = 2000
+	GasUnitPrice = 1
 )
 
 func init() {
