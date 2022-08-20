@@ -97,7 +97,8 @@ when run we got:
     faucet first 
     Get faucet:https://faucet.devnet.aptoslabs.com/mint?address=0x62c0ce0d9d2d6bea852abd6f4feb6f88dea0a4a4eabc9edf295a4949f3f47870&amount=10000 
     Get faucet:https://faucet.devnet.aptoslabs.com/mint?address=0x0b74ceb77162d79c5d61a546e8a2e47c29e35f0fced9e961e8c7a919802ed0de&amount=10000 
-    wait 10 second ...Alice balance:10000
+    wait 10 second ...
+    Alice balance:10000
     Bob balance:10000
     Alice transfer 5000 to bob with hash:0x6566c80b00cb66a79cbe153ed96827fc62a8b57d4675dd260813edf644fe3939
     ====================================================

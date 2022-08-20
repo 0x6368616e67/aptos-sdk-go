@@ -53,7 +53,7 @@ func main() {
 	}
 	fmt.Printf("Alice transfer %d to bob with hash:%s\n", 5000, hash)
 	fmt.Printf("====================================================\n")
-	fmt.Printf("wait 10 second ...")
+	fmt.Printf("wait 10 second ...\n")
 	time.Sleep(10 * time.Second) // wait for stat
 	aliceBalance, err = alice.Balance()
 	if err != nil {
