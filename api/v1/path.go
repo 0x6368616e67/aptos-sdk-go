@@ -70,10 +70,10 @@ func Path(ant MethodType) (rawpath string, method string) {
 	if len(items) == 1 {
 		rawpath = p
 		method = "GET"
-		return
+	} else {
+		method = items[0]
+		rawpath = strings.Join(items[1:], "@")
 	}
-	method = items[0]
-	rawpath = strings.Join(items[1:], "@")
 	rawpath = fmt.Sprintf("v1/%s", rawpath)
 	return
 }

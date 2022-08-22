@@ -36,4 +36,6 @@ func TestEndodeURLPath(t *testing.T) {
 	}
 
 	assert.Equal(t, "accounts/0xabc", endodeURLPath("accounts/{address}", req))
+	assert.Equal(t, "v1/", endodeURLPath("v1/", nil))
+
 }

@@ -3,6 +3,7 @@ package aptos
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/0x6368616e67/aptos-sdk-go/types"
 	"github.com/stretchr/testify/assert"
@@ -25,31 +26,43 @@ func TestLedgerInfo(t *testing.T) {
 	info, err := cli.LedgerInfo(context.Background())
 	t.Logf("info:%+v \n", info)
 	assert.Equal(t, err, nil, "LedgerInfo error")
-	assert.Equal(t, info.ChainID, 23)
+	assert.Equal(t, info.ChainID, 24)
 }
 
 func TestGetAccount(t *testing.T) {
+	account := NewAccount()
+	faucet(account.Address().String(), 10000)
+	time.Sleep(1 * time.Second)
+
 	cli, err := DialContext(context.Background(), devnet)
 	assert.Equal(t, err, nil, "DialContext error")
-	info, err := cli.GetAccount(context.Background(), "0x5c96ae24729caa96958df32f0c8ca715494d738e943b14961541e477b133ea9c", 0)
+	info, err := cli.GetAccount(context.Background(), account.Address().String(), 0)
 	t.Logf("info:%+v \n", info)
 	assert.Equal(t, err, nil, "GetAccount error")
 	assert.Greater(t, len(info.AuthenticationKey), 0)
 }
 
 func TestGetAccountResource(t *testing.T) {
+	account := NewAccount()
+	faucet(account.Address().String(), 10000)
+	time.Sleep(1 * time.Second)
+
 	cli, err := DialContext(context.Background(), devnet)
 	assert.Equal(t, err, nil, "DialContext error")
-	info, err := cli.GetAccountResource(context.Background(), "0x81873855df80aae3e1468e4d47d85f4be2126df25574d29b40cb57be01a93c1c", 0)
+	info, err := cli.GetAccountResource(context.Background(), account.Address().String(), 0)
 	t.Logf("info:%+v \n", info)
 	assert.Equal(t, err, nil, "GetAccount error")
 	assert.Greater(t, len(info), 0)
 }
 
 func TestGetAccountResourceWithType(t *testing.T) {
+	account := NewAccount()
+	faucet(account.Address().String(), 10000)
+	time.Sleep(1 * time.Second)
+
 	cli, err := DialContext(context.Background(), devnet)
 	assert.Equal(t, err, nil, "DialContext error")
-	info, err := cli.GetAccountResourceWithType(context.Background(), "0x81873855df80aae3e1468e4d47d85f4be2126df25574d29b40cb57be01a93c1c", "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>", 0)
+	info, err := cli.GetAccountResourceWithType(context.Background(), account.Address().String(), "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>", 0)
 	t.Logf("info:%+v \n", info)
 	assert.Equal(t, err, nil, "GetAccountResourceWithType error")
 	assert.Greater(t, len(info.Data), 0)
@@ -76,10 +89,10 @@ func TestGetAccountModuleWithName(t *testing.T) {
 func TestGetBlock(t *testing.T) {
 	cli, err := DialContext(context.Background(), devnet)
 	assert.Equal(t, err, nil, "DialContext error")
-	info, err := cli.GetBlock(context.Background(), 2042680, true)
+	info, err := cli.GetBlock(context.Background(), 2, true)
 	t.Logf("info:%+v \n", info)
 	assert.Equal(t, err, nil, "GetBlock error")
-	assert.Equal(t, info.BlockHeight, "2042680")
+	assert.Equal(t, info.BlockHeight, "2")
 
 	_, err = cli.GetBlock(context.Background(), 20426801232323, true)
 	assert.NotEqual(t, err, nil)

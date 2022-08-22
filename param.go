@@ -63,14 +63,14 @@ func encodeURLParam(msg interface{}) string {
 
 func endodePathParam(paramPath string, msg interface{}) string {
 	if msg == nil {
-		return ""
+		return paramPath
 	}
 	t := reflect.TypeOf(msg)
 	v := reflect.ValueOf(msg)
 	k := v.Kind()
 
 	if k != reflect.Struct {
-		return ""
+		return paramPath
 	}
 
 	param := paramPath

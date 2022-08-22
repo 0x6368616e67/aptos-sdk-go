@@ -14,4 +14,5 @@ func TestPath(t *testing.T) {
 	rp, m = Path(MTLedger)
 	assert.Equal(t, m, "GET")
 	assert.Equal(t, rp, "v1/")
+	t.Logf("rp:%v\n", rp)
 }

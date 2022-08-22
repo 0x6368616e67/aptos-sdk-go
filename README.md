@@ -102,7 +102,8 @@ when run we got:
     Bob balance:10000
     Alice transfer 5000 to bob with hash:0x6566c80b00cb66a79cbe153ed96827fc62a8b57d4675dd260813edf644fe3939
     ====================================================
-    wait 10 second ...Alice balance:4999
+    wait 10 second ...
+    Alice balance:4999
     Bob balance:15000
 
 Then in the explorer , we can see what happend [0x6566c80b00cb66a79cbe153ed96827fc62a8b57d4675dd260813edf644fe3939](https://explorer.devnet.aptos.dev/txn/2604671) (as devnet will be reload, this version for the hash will change, use your own please.)
