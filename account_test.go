@@ -54,8 +54,8 @@ func TestAccountSubmitTransaction2(t *testing.T) {
 	//account := NewAccountWithHexSeed("5457B9493319D90188BF69187E9F8E8476258061341D86D6DB969A1E6C5FD7AD")
 	account := NewAccount()
 	faucet(account.Address().String(), 10000)
-	err := account.SyncSequence()
 	time.Sleep(1 * time.Second)
+	err := account.SyncSequence()
 	assert.Equal(t, err, nil)
 	var args []interface{}
 	args = append(args, account.Address().String())
