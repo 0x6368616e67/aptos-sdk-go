@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	faucetURLFmt = "https://faucet.devnet.aptoslabs.com/mint?address=%s&amount=%d"
+	faucetURLFmt = "https://tap.devnet.prod.gcp.aptosdev.com/mint?address=%s&amount=%d"
 )
 
 func faucet(addr string, amount uint64) (err error) {

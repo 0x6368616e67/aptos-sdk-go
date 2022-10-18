@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	faucetURLFmt = "https://faucet.devnet.aptoslabs.com/mint?address=%s&amount=%d"
+	faucetURLFmt = "https://tap.devnet.prod.gcp.aptosdev.com/mint?address=%s&amount=%d"
 )
 
 func faucet(addr string, amount uint64) (err error) {
@@ -24,11 +24,11 @@ func main() {
 	alice := aptos.NewAccount()
 	bob := aptos.NewAccount()
 	fmt.Printf("faucet first \n")
-	err := faucet(alice.Address().String(), 10000)
+	err := faucet(alice.Address().String(), 1000000)
 	if err != nil {
 		panic(err.Error())
 	}
-	err = faucet(bob.Address().String(), 10000)
+	err = faucet(bob.Address().String(), 1000000)
 	if err != nil {
 		panic(err.Error())
 	}

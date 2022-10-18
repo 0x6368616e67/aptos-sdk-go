@@ -4,7 +4,7 @@ Aptos SDK for Golang
 [![Go Build status](https://github.com/0x6368616e67/aptos-sdk-go/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/0x6368616e67/aptos-sdk-go/actions/workflows/build.yml)[![Test status](https://github.com/0x6368616e67/aptos-sdk-go/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/0x6368616e67/aptos-sdk-go/actions/workflows/ci.yml) [![SDK Documentation](https://img.shields.io/badge/SDK-Documentation-blue)](https://pkg.go.dev/github.com/0x6368616e67/aptos-sdk-go) [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/0x6368616e67/aptos-sdk-go/blob/main/LICENSE)
 
 `aptos-sdk-go` is a golang sdk for [Aptos](https://aptoslabs.com/). Which contains 
-all [RPC API](https://fullnode.devnet.aptoslabs.com/) with `Client` and some operation 
+all [RPC API](https://fullnode.mainnet.aptoslabs.com/v1/spec#/) with `Client` and some operation 
 for `Account` object such as `Transfer`, `Balance` etc...
 
 ## Getting started
@@ -30,7 +30,7 @@ Here is the code
     )
 
     var (
-        faucetURLFmt = "https://faucet.devnet.aptoslabs.com/mint?address=%s&amount=%d"
+        faucetURLFmt = "https://tap.devnet.prod.gcp.aptosdev.com/mint?address=%s&amount=%d"
     )
 
     func faucet(addr string, amount uint64) (err error) {
@@ -95,8 +95,8 @@ when run we got:
 
     alice_and_bob % go run main.go 
     faucet first 
-    Get faucet:https://faucet.devnet.aptoslabs.com/mint?address=0x62c0ce0d9d2d6bea852abd6f4feb6f88dea0a4a4eabc9edf295a4949f3f47870&amount=10000 
-    Get faucet:https://faucet.devnet.aptoslabs.com/mint?address=0x0b74ceb77162d79c5d61a546e8a2e47c29e35f0fced9e961e8c7a919802ed0de&amount=10000 
+    Get faucet:https://tap.devnet.prod.gcp.aptosdev.com/mint?address=0x62c0ce0d9d2d6bea852abd6f4feb6f88dea0a4a4eabc9edf295a4949f3f47870&amount=10000 
+    Get faucet:https://tap.devnet.prod.gcp.aptosdev.com/mint?address=0x0b74ceb77162d79c5d61a546e8a2e47c29e35f0fced9e961e8c7a919802ed0de&amount=10000 
     wait 10 second ...
     Alice balance:10000
     Bob balance:10000

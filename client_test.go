@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	devnet = "https://fullnode.devnet.aptoslabs.com"
+	devnet = "https://fullnode.devnet.aptoslabs.com/v1"
 )
 
 func TestHealthy(t *testing.T) {
