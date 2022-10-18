@@ -6,7 +6,7 @@ const (
 
 var (
 	Endpoint     string
-	MaxGasAmount = 1000
+	MaxGasAmount = 10000
 	GasUnitPrice = 100
 )
 

@@ -98,3 +98,12 @@ func TestAccountBalance(t *testing.T) {
 	assert.Equal(t, err, nil)
 	t.Logf("balance:%d", balance)
 }
+
+func TestCreateAptosAccount(t *testing.T) {
+	account := NewAccountWithHexSeed("5457B9493319D90188BF69187E9F8E8476258061341D86D6DB969A1E6C5FD7AD")
+	faucet(account.Address().String(), 1000000)
+	time.Sleep(1 * time.Second)
+	aptosAccount, err := account.CreateAptosAccount()
+	assert.Equal(t, err, nil)
+	t.Logf("aptosAccount:%s", aptosAccount.Address().String())
+}

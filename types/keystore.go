@@ -90,7 +90,6 @@ func (privKey PrivKey) PubKey() PubKey {
 }
 
 func (privKey PrivKey) String() string {
-	fmt.Printf("len privkey:%d\n", len(privKey))
 	return fmt.Sprintf("0x%x", []byte(privKey))
 }
 
