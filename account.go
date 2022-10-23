@@ -29,6 +29,19 @@ func NewAccount() *Account {
 	return acc
 }
 
+func NewAccountWithPrivateKey(key string) *Account {
+	acc := &Account{}
+	var err error
+	if acc.privateKey, err = types.GenPrivKeyFromHex(key); err != nil {
+		return nil
+	}
+
+	if acc.cli, err = Dial(Endpoint); err != nil {
+		return nil
+	}
+	return acc
+}
+
 func NewAccountWithHexSeed(seed string) *Account {
 	acc := &Account{
 		sequence: 0,

@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"crypto/subtle"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
@@ -109,6 +110,15 @@ func (privKey PrivKey) Type() string {
 // in tendermint/libs/common to generate the private key.
 func GenPrivKey() PrivKey {
 	return genPrivKey(rand.Reader)
+}
+
+// GenPrivKeyFromHex generates a ed25519 private key from hex format private key.
+func GenPrivKeyFromHex(key string) (pk PrivKey, err error) {
+	buf, err := hex.DecodeString(key)
+	if err != nil {
+		return
+	}
+	pk = PrivKey(buf)
 }
 
 // GenPrivKey generates a new ed25519 private key.
