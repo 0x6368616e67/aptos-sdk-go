@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/0x6368616e67/aptos-sdk-go/framework"
 	"github.com/0x6368616e67/aptos-sdk-go/types"
 )
 
@@ -182,5 +183,34 @@ func (acc *Account) Balance() (balance uint64, err error) {
 		return
 	}
 	balance, err = strconv.ParseUint(coin.Coin.Value, 10, 64)
+	return
+}
+
+func (acc *Account) CreateAptosAccount() (account *framework.AptosAccount, err error) {
+	account = framework.NewAptosAccount(nil, acc.Address())
+	err = acc.SyncSequence()
+	if err != nil {
+		return
+	}
+
+	var args []interface{}
+	args = append(args, account.Address().String())
+	tx := types.Transaction{
+		InnerTransaction: types.InnerTransaction{
+			Sender:                  acc.Address().String(),
+			SequenceNumber:          strconv.FormatUint(acc.sequence, 10),
+			MaxGasAmount:            strconv.FormatUint(uint64(MaxGasAmount), 10),
+			GasUnitPrice:            strconv.FormatUint(uint64(GasUnitPrice), 10),
+			ExpirationTimestampSecs: strconv.FormatUint(uint64(time.Now().Unix()+10*60), 10),
+			Payload: types.TransactionPayload{
+				Type:          "entry_function_payload",
+				Function:      "0x1::aptos_account::create_account",
+				Arguments:     args,
+				TypeArguments: make([]string, 0),
+			},
+		},
+		SecondarySigners: nil,
+	}
+	_, err = acc.SendTransaction(&tx)
 	return
 }
