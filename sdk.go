@@ -1,7 +1,8 @@
 package aptos
 
 const (
-	Devnet string = "https://fullnode.devnet.aptoslabs.com"
+	Devnet  string = "https://fullnode.devnet.aptoslabs.com"
+	Mainnet string = "https://fullnode.mainnet.aptoslabs.com"
 )
 
 var (

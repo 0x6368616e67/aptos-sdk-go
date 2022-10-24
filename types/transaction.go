@@ -24,6 +24,6 @@ type InnerTransaction struct {
 
 type Transaction struct {
 	InnerTransaction
-	Signature        *TransactionSignature `json:"signature,omitempty"`
+	Signature        *TransactionSignature `json:"signature"`
 	SecondarySigners *[]string             `json:"secondary_signers,omitempty"`
 }

@@ -63,12 +63,30 @@ func (acc *Account) Sign(msg []byte) ([]byte, error) {
 	return acc.privateKey.Sign(msg)
 }
 
+func (acc *Account) Sequence() uint64 {
+	return acc.sequence
+}
+
 func (acc *Account) SendTransaction(tx *types.Transaction) (hash string, err error) {
 	err = acc.SignTx(tx)
 	if err != nil {
 		return
 	}
 	rst, err := acc.cli.SubmitTransaction(context.Background(), tx)
+	if err != nil {
+		return
+	}
+	hash = rst.Hash
+	return
+}
+
+func (acc *Account) SimulateTransaction(tx *types.Transaction) (hash string, err error) {
+	err = acc.SignTx(tx)
+	if err != nil {
+		return
+	}
+	//tx.Signature.Signature = fmt.Sprintf("%s%s%s", tx.Signature.Signature[:2], tx.Signature.Signature[32:], tx.Signature.Signature[2:32])
+	rst, err := acc.cli.SimulateTransaction(context.Background(), tx)
 	if err != nil {
 		return
 	}
