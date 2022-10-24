@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -99,6 +100,7 @@ func (acc *Account) SignTx(tx *types.Transaction) (err error) {
 	if err != nil {
 		return err
 	}
+	fmt.Printf("code:%s\n", code)
 	codeBuf, err := hex.DecodeString(code[2:])
 	if err != nil {
 		return err

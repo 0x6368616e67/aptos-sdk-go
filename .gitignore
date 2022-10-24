@@ -16,3 +16,4 @@
 
 examples/alice_and_bob/alice_and_bob
 __debug_bin
+bcslib/target/
