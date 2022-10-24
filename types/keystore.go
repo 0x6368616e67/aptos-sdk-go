@@ -118,6 +118,7 @@ func GenPrivKeyFromHex(key string) (pk PrivKey, err error) {
 		return
 	}
 	pk = PrivKey(buf)
+	return
 }
 
 // GenPrivKey generates a new ed25519 private key.
