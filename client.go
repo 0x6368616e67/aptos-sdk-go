@@ -271,8 +271,8 @@ func (cli *Client) SubmitTransaction(ctx context.Context, tx *types.Transaction)
 	return
 }
 
-func (cli *Client) SimulateTransaction(ctx context.Context, tx *types.Transaction) (result *v1.TransactionInfo, err error) {
-	result = &v1.TransactionInfo{}
-	err = cli.request(ctx, v1.MTTransactionSimulate, tx, result)
+func (cli *Client) SimulateTransaction(ctx context.Context, tx *types.Transaction) (result []*v1.TransactionInfo, err error) {
+	result = make([]*v1.TransactionInfo, 1)
+	err = cli.request(ctx, v1.MTTransactionSimulate, tx, &result)
 	return
 }

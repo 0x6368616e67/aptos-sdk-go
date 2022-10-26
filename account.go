@@ -4,8 +4,9 @@ import (
 	"context"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/0x6368616e67/aptos-sdk-go/framework"
@@ -81,18 +82,23 @@ func (acc *Account) SendTransaction(tx *types.Transaction) (hash string, err err
 	return
 }
 
-func (acc *Account) SimulateTransaction(tx *types.Transaction) (hash string, err error) {
+func (acc *Account) SimulateTransaction(tx *types.Transaction) (err error) {
 	err = acc.SignTx(tx)
 	if err != nil {
 		return
 	}
-	//tx.Signature.Signature = fmt.Sprintf("%s%s%s", tx.Signature.Signature[:2], tx.Signature.Signature[32:], tx.Signature.Signature[2:32])
+	tx.Signature.Signature = "0x" + strings.Repeat("0", len(tx.Signature.Signature)-2)
 	rst, err := acc.cli.SimulateTransaction(context.Background(), tx)
 	if err != nil {
 		return
 	}
-	hash = rst.Hash
-	return
+	if len(rst) == 0 {
+		return errors.New("result is empty")
+	}
+	if !rst[0].Success {
+		return errors.New(rst[0].VMStatus)
+	}
+	return nil
 }
 
 func (acc *Account) SignTx(tx *types.Transaction) (err error) {
@@ -100,7 +106,6 @@ func (acc *Account) SignTx(tx *types.Transaction) (err error) {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("code:%s\n", code)
 	codeBuf, err := hex.DecodeString(code[2:])
 	if err != nil {
 		return err
