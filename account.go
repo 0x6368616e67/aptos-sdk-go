@@ -33,6 +33,7 @@ func NewAccount() *Account {
 }
 
 func NewAccountWithPrivateKey(key string) *Account {
+	key = strings.TrimPrefix(key, "0x")
 	acc := &Account{}
 	var err error
 	if acc.privateKey, err = types.GenPrivKeyFromHex(key); err != nil {
@@ -59,6 +60,17 @@ func NewAccountWithHexSeed(seed string) *Account {
 		return nil
 	}
 	return acc
+}
+
+func (acc *Account) PrivateKey() string {
+	return acc.privateKey.String()
+}
+
+func (acc *Account) Reconnect() (err error) {
+	if acc.cli, err = Dial(Endpoint); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (acc *Account) Sign(msg []byte) ([]byte, error) {
