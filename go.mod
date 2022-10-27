@@ -1,8 +1,9 @@
 module github.com/0x6368616e67/aptos-sdk-go
 
-go 1.17
+go 1.18
 
 require (
+	github.com/coming-chat/lcs v0.0.0-20220829063658-0fa8432d2bdf
 	github.com/oasisprotocol/curve25519-voi v0.0.0-20220708102147-0a8a51822cae
 	github.com/stretchr/testify v1.8.0
 	golang.org/x/crypto v0.0.0-20220817201139-bc19a97f63c8
