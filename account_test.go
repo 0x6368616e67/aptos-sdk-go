@@ -82,7 +82,10 @@ func TestAccountSubmitTransaction2(t *testing.T) {
 }
 
 func TestAccountTransfer(t *testing.T) {
+	var err error
 	account := NewAccountWithHexSeed("5457B9493319D90188BF69187E9F8E8476258061341D86D6DB969A1E6C5FD7AD")
+	account.Cli, err = Dial(Endpoint)
+	assert.Equal(t, err, nil)
 	faucet(account.Address().String(), 1000000)
 	time.Sleep(1 * time.Second)
 	hash, err := account.Transfer(types.HexToAddress("0xb5b3f30964642ff9406c092e89f320ace3ec8508e039b41f66adf7d466d52df9"), 1000)

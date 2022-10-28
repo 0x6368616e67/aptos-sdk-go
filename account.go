@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -14,9 +15,9 @@ import (
 )
 
 type Account struct {
+	Cli        *Client
 	privateKey types.PrivKey
 	sequence   uint64
-	cli        *Client
 }
 
 func NewAccount() *Account {
@@ -25,10 +26,6 @@ func NewAccount() *Account {
 	}
 
 	acc.privateKey = types.GenPrivKey()
-	var err error
-	if acc.cli, err = Dial(Endpoint); err != nil {
-		return nil
-	}
 	return acc
 }
 
@@ -37,10 +34,6 @@ func NewAccountWithPrivateKey(key string) *Account {
 	acc := &Account{}
 	var err error
 	if acc.privateKey, err = types.GenPrivKeyFromHex(key); err != nil {
-		return nil
-	}
-
-	if acc.cli, err = Dial(Endpoint); err != nil {
 		return nil
 	}
 	return acc
@@ -56,21 +49,11 @@ func NewAccountWithHexSeed(seed string) *Account {
 	}
 	acc.privateKey = types.GenPrivKeyFromSeed(seedBuf)
 
-	if acc.cli, err = Dial(Endpoint); err != nil {
-		return nil
-	}
 	return acc
 }
 
 func (acc *Account) PrivateKey() string {
 	return acc.privateKey.String()
-}
-
-func (acc *Account) Reconnect() (err error) {
-	if acc.cli, err = Dial(Endpoint); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (acc *Account) Sign(msg []byte) ([]byte, error) {
@@ -82,11 +65,11 @@ func (acc *Account) Sequence() uint64 {
 }
 
 func (acc *Account) SendTransaction(tx *types.Transaction) (hash string, err error) {
-	err = acc.SignTx(tx)
-	if err != nil {
-		return
+	if acc.Cli == nil {
+		return "", ErrNilClient
 	}
-	rst, err := acc.cli.SubmitTransaction(context.Background(), tx)
+
+	rst, err := acc.Cli.SubmitTransaction(context.Background(), tx)
 	if err != nil {
 		return
 	}
@@ -95,12 +78,15 @@ func (acc *Account) SendTransaction(tx *types.Transaction) (hash string, err err
 }
 
 func (acc *Account) SimulateTransaction(tx *types.Transaction) (err error) {
+	if acc.Cli == nil {
+		return ErrNilClient
+	}
 	err = acc.SignTx(tx)
 	if err != nil {
 		return
 	}
 	tx.Signature.Signature = "0x" + strings.Repeat("0", len(tx.Signature.Signature)-2)
-	rst, err := acc.cli.SimulateTransaction(context.Background(), tx)
+	rst, err := acc.Cli.SimulateTransaction(context.Background(), tx)
 	if err != nil {
 		return
 	}
@@ -114,7 +100,10 @@ func (acc *Account) SimulateTransaction(tx *types.Transaction) (err error) {
 }
 
 func (acc *Account) SignTx(tx *types.Transaction) (err error) {
-	code, err := acc.cli.GetTransactionEncoding(context.Background(), tx)
+	if acc.Cli == nil {
+		return ErrNilClient
+	}
+	code, err := acc.Cli.GetTransactionEncoding(context.Background(), tx)
 	if err != nil {
 		return err
 	}
@@ -136,12 +125,37 @@ func (acc *Account) SignTx(tx *types.Transaction) (err error) {
 	return nil
 }
 
+func (acc *Account) SignTxWithBCSPayload(tx *types.Transaction, payload types.RawTransactionPayload) (err error) {
+	codeBuf, err := tx.EncodeToBCS(payload)
+	if err != nil {
+		return err
+	}
+	codeHex := hex.EncodeToString(codeBuf)
+	fmt.Printf("code:%s \n", codeHex)
+	sign, err := acc.Sign(codeBuf)
+	if err != nil {
+		return err
+	}
+	signHex := hex.EncodeToString(sign)
+	signHex = "0x" + signHex
+	tx.Signature = &types.TransactionSignature{
+		Type:      "ed25519_signature",
+		PublicKey: acc.privateKey.PubKey().String(),
+		Signature: signHex,
+	}
+	fmt.Printf("inner tx:%+v \n", tx)
+	return nil
+}
+
 func (acc *Account) Address() types.Address {
 	return acc.privateKey.PubKey().Address()
 }
 
 func (acc *Account) SyncSequence() error {
-	info, err := acc.cli.GetAccount(context.Background(), acc.Address().String(), 0)
+	if acc.Cli == nil {
+		return ErrNilClient
+	}
+	info, err := acc.Cli.GetAccount(context.Background(), acc.Address().String(), 0)
 	if err != nil {
 		return err
 	}
@@ -177,13 +191,44 @@ func (acc *Account) Transfer(to types.Address, amount uint64) (hash string, err 
 		},
 		SecondarySigners: nil,
 	}
+	{
+		mn, fn, err := types.ParseModuleAndFunctionName("0x1::coin::transfer")
+		if err != nil {
+			return "", err
+		}
+		targ1, err := types.NewTypeTagStructFromString("0x1::aptos_coin::AptosCoin")
+		if err != nil {
+			return "", err
+		}
+		amountArg := types.EncodeBCS(amount)
+		toArg := to[:]
+		tArgs := []types.TypeTag{*targ1}
+		args := [][]byte{toArg, amountArg}
+		payload := types.RawTransactionPayloadEntryFunction{
+			ModuleName:   *mn,
+			FunctionName: fn,
+			TyArgs:       tArgs,
+			Args:         args,
+		}
+		err = acc.SignTxWithBCSPayload(&tx, payload)
+		if err != nil {
+			return "", err
+		}
+	}
+	fmt.Printf("tx:%+v \n", tx)
+
+	code, _ := acc.Cli.GetTransactionEncoding(context.Background(), &tx)
+	fmt.Printf("JSON CODE:%s \n", code)
+
 	hash, err = acc.SendTransaction(&tx)
 	return
 }
 
 func (acc *Account) Balance() (balance uint64, err error) {
-
-	info, err := acc.cli.GetAccountResourceWithType(context.Background(), acc.Address().String(), "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>", 0)
+	if acc.Cli == nil {
+		return 0, ErrNilClient
+	}
+	info, err := acc.Cli.GetAccountResourceWithType(context.Background(), acc.Address().String(), "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>", 0)
 	if err != nil {
 		return
 	}

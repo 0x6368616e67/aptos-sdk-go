@@ -2,10 +2,17 @@ package types
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 
 	"github.com/coming-chat/lcs"
+	"golang.org/x/crypto/sha3"
+)
+
+const (
+	RAW_TRANSACTION_SALT           = "APTOS::RawTransaction"
+	RAW_TRANSACTION_WITH_DATA_SALT = "APTOS::RawTransactionWithData"
 )
 
 func init() {
@@ -40,7 +47,7 @@ type RawTransactionPayloadScript struct {
 }
 
 type RawTransactionPayloadEntryFunction struct {
-	ModuleName   ModuleId  `lcs:"module_name"`
+	ModuleName   ModuleID  `lcs:"module_name"`
 	FunctionName string    `lcs:"function_name"`
 	TyArgs       []TypeTag `lcs:"ty_args"`
 	Args         [][]byte  `lcs:"args"`
@@ -52,21 +59,21 @@ type Module struct {
 	Code []byte `lcs:"code"`
 }
 
-type ModuleId struct {
+type ModuleID struct {
 	Address Address `lcs:"address"`
 	Name    string  `lcs:"name"`
 }
 
-func NewModuleIdFromString(moduleId string) (*ModuleId, error) {
-	parts := strings.Split(moduleId, "::")
-	if len(parts) != 2 {
-		return nil, errors.New("invalid module id")
+func ParseModuleAndFunctionName(function string) (*ModuleID, string, error) {
+	parts := strings.Split(function, "::")
+	if len(parts) != 3 {
+		return nil, "", errors.New("invalid function literal")
 	}
 	addr := HexToAddress(parts[0])
-	return &ModuleId{
+	return &ModuleID{
 		addr,
 		parts[1],
-	}, nil
+	}, parts[2], nil
 }
 
 type RawTransactionArgument interface{}
@@ -146,6 +153,10 @@ func (tx *Transaction) ToRawTransaction(payload RawTransactionPayload) *RawTrans
 
 func (tx *Transaction) EncodeToBCS(payload RawTransactionPayload) (data []byte, err error) {
 	rawTx := tx.ToRawTransaction(payload)
+	rawTx.ChainID = 35
+	fmt.Printf("rawTx:%+v \n", rawTx)
+	prefixBytes := sha3.Sum256([]byte(RAW_TRANSACTION_SALT))
 	data, err = lcs.Marshal(rawTx)
+	data = append(prefixBytes[:], data...)
 	return
 }
