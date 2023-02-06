@@ -1,7 +1,8 @@
 # aptos-sdk-go
 Aptos SDK for Golang
 
-[![Go Build status](https://github.com/0x6368616e67/aptos-sdk-go/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/0x6368616e67/aptos-sdk-go/actions/workflows/build.yml)[![Test status](https://github.com/0x6368616e67/aptos-sdk-go/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/0x6368616e67/aptos-sdk-go/actions/workflows/ci.yml) [![SDK Documentation](https://img.shields.io/badge/SDK-Documentation-blue)](https://pkg.go.dev/github.com/0x6368616e67/aptos-sdk-go) [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/0x6368616e67/aptos-sdk-go/blob/main/LICENSE)
+
+[![Aptos RPC](https://img.shields.io/badge/Aptos-v1.2-green)](https://fullnode.mainnet.aptoslabs.com/v1/spec#/) [![Go Build status](https://github.com/0x6368616e67/aptos-sdk-go/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/0x6368616e67/aptos-sdk-go/actions/workflows/build.yml)[![Test status](https://github.com/0x6368616e67/aptos-sdk-go/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/0x6368616e67/aptos-sdk-go/actions/workflows/ci.yml) [![SDK Documentation](https://img.shields.io/badge/SDK-Documentation-blue)](https://pkg.go.dev/github.com/0x6368616e67/aptos-sdk-go) [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/0x6368616e67/aptos-sdk-go/blob/main/LICENSE)
 
 `aptos-sdk-go` is a golang sdk for [Aptos](https://aptoslabs.com/). Which contains 
 all [RPC API](https://fullnode.mainnet.aptoslabs.com/v1/spec#/) with `Client` and some operation 
@@ -22,6 +23,7 @@ Here is the code
     package main
 
     import (
+        "context"
         "fmt"
         "net/http"
         "time"
@@ -42,53 +44,58 @@ Here is the code
     }
 
     func main() {
-        alice := aptos.NewAccount()
-        bob := aptos.NewAccount()
-        fmt.Printf("faucet first \n")
-        err := faucet(alice.Address().String(), 10000)
+        cli, err := aptos.DialContext(context.Background(), aptos.Devnet)
         if err != nil {
             panic(err.Error())
         }
-        err = faucet(bob.Address().String(), 10000)
+        alice := aptos.NewAccount()
+        bob := aptos.NewAccount()
+        fmt.Printf("faucet first \n")
+        err = faucet(alice.Address().String(), 1000000)
+        if err != nil {
+            panic(err.Error())
+        }
+        err = faucet(bob.Address().String(), 1000000)
         if err != nil {
             panic(err.Error())
         }
 
         fmt.Printf("wait 10 second ...")
         time.Sleep(10 * time.Second) // wait for stat
-        aliceBalance, err := alice.Balance()
+        aliceBalance, err := alice.Balance(cli)
         if err != nil {
             panic(err.Error())
         }
         fmt.Printf("Alice balance:%d\n", aliceBalance)
 
-        bobBalance, err := bob.Balance()
+        bobBalance, err := bob.Balance(cli)
         if err != nil {
             panic(err.Error())
         }
         fmt.Printf("Bob balance:%d\n", bobBalance)
 
-        hash, err := alice.Transfer(bob.Address(), 5000)
+        hash, err := alice.Transfer(cli, bob.Address(), 5000)
         if err != nil {
             panic(err.Error())
         }
         fmt.Printf("Alice transfer %d to bob with hash:%s\n", 5000, hash)
         fmt.Printf("====================================================\n")
-        fmt.Printf("wait 10 second ...")
+        fmt.Printf("wait 10 second ...\n")
         time.Sleep(10 * time.Second) // wait for stat
-        aliceBalance, err = alice.Balance()
+        aliceBalance, err = alice.Balance(cli)
         if err != nil {
             panic(err.Error())
         }
         fmt.Printf("Alice balance:%d\n", aliceBalance)
 
-        bobBalance, err = bob.Balance()
+        bobBalance, err = bob.Balance(cli)
         if err != nil {
             panic(err.Error())
         }
         fmt.Printf("Bob balance:%d\n", bobBalance)
 
     }
+
 
 when run we got:
 
@@ -118,9 +125,11 @@ Then in the explorer , we can see what happend [0x6566c80b00cb66a79cbe153ed96827
 - [x] Get account modules
 - [x] Get specific account resource 
 - [x] Get specific account module
+
 ### Blocks: Access to blocks
 
 - [x] Get blocks by height
+- [x] Get blocks by version 
 
 ### Events: Access to events
 
@@ -136,6 +145,7 @@ Then in the explorer , we can see what happend [0x6566c80b00cb66a79cbe153ed96827
 ### Tables: Access to tables
 
 - [ ] Get table item
+- [ ] Get raw table item
 
 ### Transactions: Access to transactions
 
@@ -144,8 +154,14 @@ Then in the explorer , we can see what happend [0x6566c80b00cb66a79cbe153ed96827
 - [x] Get transaction by hash
 - [x] Get transaction by version
 - [x] Get account transactions
+- [ ] Submit batch transactions
 - [x] Simulate transaction
 - [x] Encode submission
+- [x] Estimate gas price
+
+### View
+
+- [] Execute view function of a module
 
 
 ## TODO

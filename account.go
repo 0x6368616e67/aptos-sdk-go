@@ -15,7 +15,6 @@ import (
 )
 
 type Account struct {
-	Cli        *Client
 	privateKey types.PrivKey
 	sequence   uint64
 }
@@ -64,12 +63,12 @@ func (acc *Account) Sequence() uint64 {
 	return acc.sequence
 }
 
-func (acc *Account) SendTransaction(tx *types.Transaction) (hash string, err error) {
-	if acc.Cli == nil {
+func (acc *Account) SendTransaction(cli *Client, tx *types.Transaction) (hash string, err error) {
+	if cli == nil {
 		return "", ErrNilClient
 	}
 
-	rst, err := acc.Cli.SubmitTransaction(context.Background(), tx)
+	rst, err := cli.SubmitTransaction(context.Background(), tx)
 	if err != nil {
 		return
 	}
@@ -77,16 +76,16 @@ func (acc *Account) SendTransaction(tx *types.Transaction) (hash string, err err
 	return
 }
 
-func (acc *Account) SimulateTransaction(tx *types.Transaction) (err error) {
-	if acc.Cli == nil {
+func (acc *Account) SimulateTransaction(cli *Client, tx *types.Transaction) (err error) {
+	if cli == nil {
 		return ErrNilClient
 	}
-	err = acc.SignTx(tx)
+	err = acc.SignTx(cli, tx)
 	if err != nil {
 		return
 	}
 	tx.Signature.Signature = "0x" + strings.Repeat("0", len(tx.Signature.Signature)-2)
-	rst, err := acc.Cli.SimulateTransaction(context.Background(), tx)
+	rst, err := cli.SimulateTransaction(context.Background(), tx)
 	if err != nil {
 		return
 	}
@@ -99,11 +98,11 @@ func (acc *Account) SimulateTransaction(tx *types.Transaction) (err error) {
 	return nil
 }
 
-func (acc *Account) SignTx(tx *types.Transaction) (err error) {
-	if acc.Cli == nil {
+func (acc *Account) SignTx(cli *Client, tx *types.Transaction) (err error) {
+	if cli == nil {
 		return ErrNilClient
 	}
-	code, err := acc.Cli.GetTransactionEncoding(context.Background(), tx)
+	code, err := cli.GetTransactionEncoding(context.Background(), tx)
 	if err != nil {
 		return err
 	}
@@ -151,11 +150,11 @@ func (acc *Account) Address() types.Address {
 	return acc.privateKey.PubKey().Address()
 }
 
-func (acc *Account) SyncSequence() error {
-	if acc.Cli == nil {
+func (acc *Account) SyncSequence(cli *Client) error {
+	if cli == nil {
 		return ErrNilClient
 	}
-	info, err := acc.Cli.GetAccount(context.Background(), acc.Address().String(), 0)
+	info, err := cli.GetAccount(context.Background(), acc.Address().String(), 0)
 	if err != nil {
 		return err
 	}
@@ -166,8 +165,8 @@ func (acc *Account) SyncSequence() error {
 	return nil
 }
 
-func (acc *Account) Transfer(to types.Address, amount uint64) (hash string, err error) {
-	err = acc.SyncSequence()
+func (acc *Account) Transfer(cli *Client, to types.Address, amount uint64) (hash string, err error) {
+	err = acc.SyncSequence(cli)
 	if err != nil {
 		return
 	}
@@ -217,18 +216,18 @@ func (acc *Account) Transfer(to types.Address, amount uint64) (hash string, err 
 	}
 	fmt.Printf("tx:%+v \n", tx)
 
-	code, _ := acc.Cli.GetTransactionEncoding(context.Background(), &tx)
+	code, _ := cli.GetTransactionEncoding(context.Background(), &tx)
 	fmt.Printf("JSON CODE:%s \n", code)
 
-	hash, err = acc.SendTransaction(&tx)
+	hash, err = acc.SendTransaction(cli, &tx)
 	return
 }
 
-func (acc *Account) Balance() (balance uint64, err error) {
-	if acc.Cli == nil {
+func (acc *Account) Balance(cli *Client) (balance uint64, err error) {
+	if cli == nil {
 		return 0, ErrNilClient
 	}
-	info, err := acc.Cli.GetAccountResourceWithType(context.Background(), acc.Address().String(), "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>", 0)
+	info, err := cli.GetAccountResourceWithType(context.Background(), acc.Address().String(), "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>", 0)
 	if err != nil {
 		return
 	}
@@ -268,9 +267,9 @@ func (acc *Account) Balance() (balance uint64, err error) {
 	return
 }
 
-func (acc *Account) CreateAptosAccount() (account *framework.AptosAccount, err error) {
+func (acc *Account) CreateAptosAccount(cli *Client) (account *framework.AptosAccount, err error) {
 	account = framework.NewAptosAccount(nil, acc.Address())
-	err = acc.SyncSequence()
+	err = acc.SyncSequence(cli)
 	if err != nil {
 		return
 	}
@@ -293,6 +292,6 @@ func (acc *Account) CreateAptosAccount() (account *framework.AptosAccount, err e
 		},
 		SecondarySigners: nil,
 	}
-	_, err = acc.SendTransaction(&tx)
+	_, err = acc.SendTransaction(cli, &tx)
 	return
 }

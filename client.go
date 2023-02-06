@@ -167,42 +167,57 @@ func (cli *Client) GetAccountModuleWithName(ctx context.Context, address string,
 	return
 }
 
-func (cli *Client) GetBlock(ctx context.Context, height uint64, withTransactions bool) (info *v1.BlockInfo, err error) {
-	param := v1.BlockReq{
-		BlockHeight:      height,
+func (cli *Client) GetBlockByHeight(ctx context.Context, height uint64, withTransactions bool) (info *v1.BlockInfo, err error) {
+	param := v1.BlockByHeightReq{
+		Height:           height,
 		WithTransactions: withTransactions,
 	}
 	info = &v1.BlockInfo{}
-	err = cli.request(ctx, v1.MTBlock, param, info)
+	err = cli.request(ctx, v1.MTBlockByHeight, param, info)
 	if err != nil {
 		return nil, err
 	}
 	return
 }
 
-func (cli *Client) GetEvent(ctx context.Context, key string, limit uint16, start uint64) (infos []*v1.EventInfo, err error) {
-	param := v1.EventReq{
-		EventKey: key,
-		Limit:    limit,
-		Start:    start,
+func (cli *Client) GetBlockByVersion(ctx context.Context, version uint64, withTransactions bool) (info *v1.BlockInfo, err error) {
+	param := v1.BlockByVersionReq{
+		Version:          version,
+		WithTransactions: withTransactions,
+	}
+	info = &v1.BlockInfo{}
+	err = cli.request(ctx, v1.MTBlockByVersion, param, info)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+func (cli *Client) GetEventByCreationNumber(ctx context.Context, address string, number string, limit uint16, start uint64) (infos []*v1.EventInfo, err error) {
+	param := v1.EventByCreationNumberReq{
+		Address:        address,
+		CreationNumber: number,
+		Limit:          limit,
+		Start:          start,
 	}
 	infos = make([]*v1.EventInfo, 1)
-	err = cli.request(ctx, v1.MTEvent, param, &infos)
+	err = cli.request(ctx, v1.MTEventByCreationNumber, param, &infos)
 	if err != nil {
 		return nil, err
 	}
 	return
 }
 
-func (cli *Client) GetEventWithHandler(ctx context.Context, address string, handler string, field string, limit uint16) (infos []*v1.EventInfo, err error) {
-	param := v1.EventWithHandlerReq{
+func (cli *Client) GetEventByHandler(ctx context.Context, address string, handler string, field string, limit uint16, start uint64) (infos []*v1.EventInfo, err error) {
+	param := v1.EventByEventHandlerReq{
 		Address: address,
 		Handler: handler,
 		Filed:   field,
-		Limit:   0,
+		Limit:   limit,
+		Start:   start,
 	}
 	infos = make([]*v1.EventInfo, 1)
-	err = cli.request(ctx, v1.MTEventWithHandler, param, &infos)
+	err = cli.request(ctx, v1.MTEventByEventHandler, param, &infos)
 	if err != nil {
 		return nil, err
 	}
@@ -262,6 +277,16 @@ func (cli *Client) GetTransactionsOfAccount(ctx context.Context, address string,
 
 func (cli *Client) GetTransactionEncoding(ctx context.Context, tx *types.Transaction) (code string, err error) {
 	err = cli.request(ctx, v1.MTTransactionEncoding, tx, &code)
+	return
+}
+
+func (cli *Client) EstimateGasPrice(ctx context.Context) (info *v1.EstimateGasPrice, err error) {
+	rsp := v1.EstimateGasPrice{}
+	err = cli.request(ctx, v1.MTEstimateGasPrice, nil, &rsp)
+	if err != nil {
+		return nil, err
+	}
+	info = &rsp
 	return
 }
 

@@ -1,12 +1,18 @@
 package v1
 
 const (
-	BlockPath = "GET@blocks/by_height/{block_height}"
+	BlockByHeightPath  = "GET@blocks/by_height/{height}"
+	BlockByVersionPath = "GET@blocks/by_version/{version}"
 )
 
-type BlockReq struct {
+type BlockByHeightReq struct {
 	WithTransactions bool   `param:"with_transactions,omitempty"`
-	BlockHeight      uint64 `path:"block_height"`
+	Height           uint64 `path:"height"`
+}
+
+type BlockByVersionReq struct {
+	WithTransactions bool   `param:"with_transactions,omitempty"`
+	Version          uint64 `path:"version"`
 }
 
 type BlockInfo struct {

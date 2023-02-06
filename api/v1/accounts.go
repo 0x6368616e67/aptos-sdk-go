@@ -23,6 +23,8 @@ type AccountInfo struct {
 type AccountResourceReq struct {
 	LedgerVersion uint64 `param:"ledger_version,omitempty" `
 	Address       string `path:"address"`
+	Start         int64  `param:"start,omitempty" `
+	Limit         int64  `param:"limit,omitempty" `
 }
 
 type AccountResourceWithTypeReq struct {
@@ -39,6 +41,8 @@ type AccountResourceInfo struct {
 type AccountModuleReq struct {
 	LedgerVersion uint64 `param:"ledger_version,omitempty" `
 	Address       string `path:"address"`
+	Start         int64  `param:"start,omitempty" `
+	Limit         int64  `param:"limit,omitempty" `
 }
 
 type AccountModuleWithNameReq struct {

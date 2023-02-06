@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"time"
@@ -21,10 +22,14 @@ func faucet(addr string, amount uint64) (err error) {
 }
 
 func main() {
+	cli, err := aptos.DialContext(context.Background(), aptos.Devnet)
+	if err != nil {
+		panic(err.Error())
+	}
 	alice := aptos.NewAccount()
 	bob := aptos.NewAccount()
 	fmt.Printf("faucet first \n")
-	err := faucet(alice.Address().String(), 1000000)
+	err = faucet(alice.Address().String(), 1000000)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -35,19 +40,19 @@ func main() {
 
 	fmt.Printf("wait 10 second ...")
 	time.Sleep(10 * time.Second) // wait for stat
-	aliceBalance, err := alice.Balance()
+	aliceBalance, err := alice.Balance(cli)
 	if err != nil {
 		panic(err.Error())
 	}
 	fmt.Printf("Alice balance:%d\n", aliceBalance)
 
-	bobBalance, err := bob.Balance()
+	bobBalance, err := bob.Balance(cli)
 	if err != nil {
 		panic(err.Error())
 	}
 	fmt.Printf("Bob balance:%d\n", bobBalance)
 
-	hash, err := alice.Transfer(bob.Address(), 5000)
+	hash, err := alice.Transfer(cli, bob.Address(), 5000)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -55,13 +60,13 @@ func main() {
 	fmt.Printf("====================================================\n")
 	fmt.Printf("wait 10 second ...\n")
 	time.Sleep(10 * time.Second) // wait for stat
-	aliceBalance, err = alice.Balance()
+	aliceBalance, err = alice.Balance(cli)
 	if err != nil {
 		panic(err.Error())
 	}
 	fmt.Printf("Alice balance:%d\n", aliceBalance)
 
-	bobBalance, err = bob.Balance()
+	bobBalance, err = bob.Balance(cli)
 	if err != nil {
 		panic(err.Error())
 	}

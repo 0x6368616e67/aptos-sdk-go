@@ -15,17 +15,19 @@ const (
 	MTAccountModule           MethodType = 0x5
 	MTAccountResourceWithType MethodType = 0x6
 	MTAccountModuleWithName   MethodType = 0x7
-	MTBlock                   MethodType = 0x8
-	MTEvent                   MethodType = 0x9
-	MTEventWithHandler        MethodType = 0xa
 	MTTransaction             MethodType = 0xb
 	MTTransactionByHash       MethodType = 0xc
 	MTTransactionByVersion    MethodType = 0xd
 	MTTransactionOfAccount    MethodType = 0xe
 
-	MTTransactionEncoding MethodType = 0x11
-	MTTransactionSimulate MethodType = 0x12
-	MTTransactionSubmit   MethodType = 0x13
+	MTTransactionEncoding   MethodType = 0x11
+	MTTransactionSimulate   MethodType = 0x12
+	MTTransactionSubmit     MethodType = 0x13
+	MTBlockByHeight         MethodType = 0x14
+	MTBlockByVersion        MethodType = 0x15
+	MTEventByCreationNumber MethodType = 0x16
+	MTEventByEventHandler   MethodType = 0x17
+	MTEstimateGasPrice      MethodType = 0x18
 )
 
 func Path(ant MethodType) (rawpath string, method string) {
@@ -45,12 +47,14 @@ func Path(ant MethodType) (rawpath string, method string) {
 		p = AccountResourceWithTypePath
 	case MTAccountModuleWithName:
 		p = AccountModuleWithNamePath
-	case MTBlock:
-		p = BlockPath
-	case MTEvent:
-		p = EventPath
-	case MTEventWithHandler:
-		p = EventWithHandler
+	case MTBlockByHeight:
+		p = BlockByHeightPath
+	case MTBlockByVersion:
+		p = BlockByVersionPath
+	case MTEventByCreationNumber:
+		p = EventByCreationNumberPath
+	case MTEventByEventHandler:
+		p = EventByEventHandlerPath
 	case MTTransaction:
 		p = TransactionPath
 	case MTTransactionByHash:
@@ -65,6 +69,8 @@ func Path(ant MethodType) (rawpath string, method string) {
 		p = TransactionSimulatePath
 	case MTTransactionSubmit:
 		p = TransactionSubmitPath
+	case MTEstimateGasPrice:
+		p = EstimateGasPricePath
 	}
 	items := strings.Split(p, "@")
 	if len(items) == 1 {

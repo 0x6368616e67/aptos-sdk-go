@@ -10,6 +10,7 @@ type HealthyReq struct {
 }
 
 type HealthyRsp struct {
+	Message string `json:"message"`
 }
 
 type LedgerInfo struct {
@@ -17,10 +18,11 @@ type LedgerInfo struct {
 	Epoch               string `json:"epoch"`
 	LedgerVersion       string `json:"ledger_version"`
 	OldestLedgerVersion string `json:"oldest_ledger_version"`
-	BlockHeight         string `json:"block_height"`
-	OldestBlockHeight   string `json:"oldest_block_height"`
 	LedgerTimestamp     string `json:"ledger_timestamp"`
 	NodeRole            string `json:"node_role"`
+	OldestBlockHeight   string `json:"oldest_block_height"`
+	BlockHeight         string `json:"block_height"`
+	GitHash             string `json:"git_hash"`
 }
 
 type LedgerRsp struct {
