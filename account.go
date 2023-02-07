@@ -80,10 +80,10 @@ func (acc *Account) SimulateTransaction(cli *Client, tx *types.Transaction) (err
 	if cli == nil {
 		return ErrNilClient
 	}
-	err = acc.SignTx(cli, tx)
-	if err != nil {
-		return
-	}
+	// err = acc.SignTx(cli, tx)
+	// if err != nil {
+	// 	return
+	// }
 	tx.Signature.Signature = "0x" + strings.Repeat("0", len(tx.Signature.Signature)-2)
 	rst, err := cli.SimulateTransaction(context.Background(), tx)
 	if err != nil {
@@ -129,8 +129,8 @@ func (acc *Account) SignTxWithBCSPayload(tx *types.Transaction, payload types.Ra
 	if err != nil {
 		return err
 	}
-	codeHex := hex.EncodeToString(codeBuf)
-	fmt.Printf("code:%s \n", codeHex)
+	// codeHex := hex.EncodeToString(codeBuf)
+	// fmt.Printf("code:%s \n", codeHex)
 	sign, err := acc.Sign(codeBuf)
 	if err != nil {
 		return err
@@ -142,7 +142,7 @@ func (acc *Account) SignTxWithBCSPayload(tx *types.Transaction, payload types.Ra
 		PublicKey: acc.privateKey.PubKey().String(),
 		Signature: signHex,
 	}
-	fmt.Printf("inner tx:%+v \n", tx)
+	// fmt.Printf("inner tx:%+v \n", tx)
 	return nil
 }
 

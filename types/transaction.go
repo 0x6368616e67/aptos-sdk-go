@@ -2,7 +2,6 @@ package types
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -154,7 +153,7 @@ func (tx *Transaction) ToRawTransaction(payload RawTransactionPayload) *RawTrans
 func (tx *Transaction) EncodeToBCS(payload RawTransactionPayload) (data []byte, err error) {
 	rawTx := tx.ToRawTransaction(payload)
 	rawTx.ChainID = 35
-	fmt.Printf("rawTx:%+v \n", rawTx)
+	//fmt.Printf("rawTx:%+v \n", rawTx)
 	prefixBytes := sha3.Sum256([]byte(RAW_TRANSACTION_SALT))
 	data, err = lcs.Marshal(rawTx)
 	data = append(prefixBytes[:], data...)
